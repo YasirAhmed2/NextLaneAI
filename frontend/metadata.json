@@ -1,0 +1,8 @@
+{
+  "name": "NextLane Discovery Engine",
+  "description": "AI-powered opportunity discovery platform that finds and filters elite internships, scholarships, hackathons, and research fellowships tailored to student profiles.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
