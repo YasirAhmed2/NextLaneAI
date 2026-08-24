@@ -11,6 +11,8 @@ interface OpportunitiesFeedProps {
   userProfile: UserProfile;
   isAuthenticated?: boolean;
   onOpenAuth?: (mode?: 'login' | 'register') => void;
+  onRefreshAgent?: () => void;
+  isRefreshing?: boolean;
 }
 
 export const OpportunitiesFeed: React.FC<OpportunitiesFeedProps> = ({
@@ -20,7 +22,9 @@ export const OpportunitiesFeed: React.FC<OpportunitiesFeedProps> = ({
   searchQuery,
   userProfile,
   isAuthenticated = false,
-  onOpenAuth
+  onOpenAuth,
+  onRefreshAgent,
+  isRefreshing = false,
 }) => {
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
 
@@ -123,6 +127,20 @@ export const OpportunitiesFeed: React.FC<OpportunitiesFeedProps> = ({
               : 'Browse high-impact grants, internships, and hackathons'}
           </p>
         </div>
+
+        {onRefreshAgent && (
+          <button
+            onClick={onRefreshAgent}
+            disabled={isRefreshing}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/15 hover:bg-[#D4AF37]/25 text-[#B38600] dark:text-[#D4AF37] text-xs font-bold transition-all cursor-pointer disabled:opacity-50 shadow-xs"
+            title="Trigger autonomous scraping & AI recalculation"
+          >
+            <span className={`material-symbols-outlined text-base ${isRefreshing ? 'animate-spin' : ''}`}>
+              autorenew
+            </span>
+            <span>{isRefreshing ? 'Agent Scanning...' : 'Refresh AI Feed'}</span>
+          </button>
+        )}
       </div>
 
       {/* Section 2: Filters */}

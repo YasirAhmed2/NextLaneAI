@@ -1,0 +1,393 @@
+[
+  {
+    "id": "opp-101",
+    "title": "Frontier AI Research Residency",
+    "organization": "Google DeepMind",
+    "location": "London, UK / Hybrid",
+    "type": "Research",
+    "deadline": "Nov 15",
+    "deadlineDate": "2026-11-15",
+    "deadlinePassed": false,
+    "source": "Google Careers",
+    "tags": [
+      "Deep Learning",
+      "PyTorch",
+      "\u00a36,200/mo",
+      "Frontier AI"
+    ],
+    "description": "Join the Frontier Intelligence team at Google DeepMind working on state-of-the-art multimodal transformer architectures, sparse reasoning graphs, and scalable reinforcement learning.",
+    "requirements": [
+      "Proficiency in Python and PyTorch / JAX",
+      "Demonstrated research curiosity in generative models or RL",
+      "Undergraduate or graduate standing in CS, Math, or Physics",
+      "Prior participation in open-source AI projects or hackathons"
+    ],
+    "compensationOrGrant": "\u00a36,200/mo + Housing & Relocation Allowance",
+    "url": "https://deepmind.google/careers",
+    "eligibilityBreakdown": {
+      "skillMatch": 94,
+      "academicAlignment": 92,
+      "timelineFit": 90,
+      "insights": [
+        "Core competencies in Python & Deep Learning align directly with lab requirements",
+        "Target application window accommodates your upcoming academic cycle"
+      ]
+    }
+  },
+  {
+    "id": "opp-102",
+    "title": "Global Generation AI Hackathon",
+    "organization": "Major League Hacking (MLH)",
+    "location": "Virtual / Global",
+    "type": "Hackathon",
+    "deadline": "Oct 24-26",
+    "deadlineDate": "2026-10-26",
+    "deadlinePassed": false,
+    "source": "MLH",
+    "tags": [
+      "$50k Pool",
+      "AI Agents",
+      "Virtual",
+      "Beginner Friendly"
+    ],
+    "description": "A 48-hour global sprint to design autonomous AI agents, tool-augmented reasoning workflows, and assistive developer tooling using next-gen LLMs.",
+    "requirements": [
+      "Open to all enrolled students and recent graduates worldwide",
+      "Submission of a working prototype with a public GitHub repo",
+      "3-minute video walkthrough detailing system architecture"
+    ],
+    "compensationOrGrant": "$50,000 Prize Pool + Cloud Computing Credits",
+    "url": "https://mlh.io",
+    "eligibilityBreakdown": {
+      "skillMatch": 96,
+      "academicAlignment": 95,
+      "timelineFit": 98,
+      "insights": [
+        "Rapid prototyping and full-stack capabilities fit hackathon agent track",
+        "Immediate registration open"
+      ]
+    }
+  },
+  {
+    "id": "opp-103",
+    "title": "Women & Minorities in Tech Grant",
+    "organization": "Google Foundation & AnitaB.org",
+    "location": "Global",
+    "type": "Scholarship",
+    "deadline": "Dec 01",
+    "deadlineDate": "2026-12-01",
+    "deadlinePassed": false,
+    "source": "Scholarships360",
+    "tags": [
+      "$10,000 Award",
+      "Mentorship",
+      "Global Eligibility"
+    ],
+    "description": "Recognizing high-achieving computational science students who demonstrate leadership, community mentorship, and passion for breaking systemic barriers in tech.",
+    "requirements": [
+      "Enrolled as a full-time undergraduate or master's student in computing",
+      "Demonstrated track record of community involvement or student leadership",
+      "Strong academic standing or equivalent project portfolio"
+    ],
+    "compensationOrGrant": "$10,000 Direct Grant + Executive Mentorship",
+    "url": "https://buildyourfuture.withgoogle.com",
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "insights": [
+        "Academic accomplishments and technical portfolio exceed qualification baseline",
+        "Essay proposal aligns with your profile objectives"
+      ]
+    }
+  },
+  {
+    "id": "opp-104",
+    "title": "Autonomous Systems Software Engineering Intern",
+    "organization": "Tesla Autopilot & Robotics",
+    "location": "Palo Alto, CA / Austin, TX",
+    "type": "Internship",
+    "deadline": "Nov 30",
+    "deadlineDate": "2026-11-30",
+    "deadlinePassed": false,
+    "source": "Tech Job Shortlist",
+    "tags": [
+      "Robotics",
+      "Python/C++",
+      "$55/hr",
+      "Summer 2026"
+    ],
+    "description": "Design and optimize high-throughput telemetry pipelines, perception neural nets, and low-latency decision agents powering full self-driving fleets.",
+    "requirements": [
+      "Proficiency in Python, C++, or modern systems languages",
+      "Solid understanding of data structures, algorithms, and distributed computing",
+      "Experience with computer vision, robotics, or sensor fusion pipelines"
+    ],
+    "compensationOrGrant": "$55/hr + Corporate Housing Stipend",
+    "url": "https://www.tesla.com/careers",
+    "eligibilityBreakdown": {
+      "skillMatch": 91,
+      "academicAlignment": 89,
+      "timelineFit": 93,
+      "insights": [
+        "Strong systems and programming foundation maps to autopilot infrastructure requirements"
+      ]
+    }
+  },
+  {
+    "id": "opp-105",
+    "title": "Quantum Computing Open Source Residency",
+    "organization": "CERN Quantum Technology Initiative",
+    "location": "Geneva, Switzerland / Hybrid",
+    "type": "Research",
+    "deadline": "Jan 15",
+    "deadlineDate": "2027-01-15",
+    "deadlinePassed": false,
+    "source": "CERN Careers",
+    "tags": [
+      "Quantum Simulators",
+      "Qiskit",
+      "CHF 4,800/mo"
+    ],
+    "description": "Contribute to hybrid quantum-classical algorithms for particle physics event classification and large-scale simulation optimization.",
+    "requirements": [
+      "Experience with Python, linear algebra, and quantum SDKs (Qiskit/Cirq)",
+      "Curiosity for scientific telemetry analysis and high-performance computing",
+      "Enrolled in University program (Bachelor, Master, or PhD)"
+    ],
+    "compensationOrGrant": "CHF 4,800/mo + Geneva Travel Grant",
+    "url": "https://home.cern/careers",
+    "eligibilityBreakdown": {
+      "skillMatch": 93,
+      "academicAlignment": 94,
+      "timelineFit": 88,
+      "insights": [
+        "Mathematical and Python foundation strongly supports quantum simulation tasks"
+      ]
+    }
+  },
+  {
+    "id": "opp-106",
+    "title": "Clean Energy & Climate AI Hackathon",
+    "organization": "MIT Energy Initiative & Devpost",
+    "location": "Cambridge, MA / Hybrid",
+    "type": "Hackathon",
+    "deadline": "Nov 18-20",
+    "deadlineDate": "2026-11-20",
+    "deadlinePassed": false,
+    "source": "Devpost",
+    "tags": [
+      "$75,000 Pool",
+      "Climate AI",
+      "Team Event"
+    ],
+    "description": "Build high-impact AI algorithms for smart grid balancing, carbon footprint tracking, and renewable energy forecasting.",
+    "requirements": [
+      "Teams of 2 to 4 creators, engineers, or researchers",
+      "Functional prototype utilizing open climate datasets",
+      "Open-source license submission"
+    ],
+    "compensationOrGrant": "$75,000 Prize Pool + YC Interview Fast-Track",
+    "url": "https://devpost.com",
+    "eligibilityBreakdown": {
+      "skillMatch": 90,
+      "academicAlignment": 88,
+      "timelineFit": 92,
+      "insights": [
+        "Data analysis and machine learning skills directly suit climate forecasting models"
+      ]
+    }
+  },
+  {
+    "id": "opp-107",
+    "title": "Palantir Future Technology Scholarship",
+    "organization": "Palantir Technologies",
+    "location": "Global",
+    "type": "Scholarship",
+    "deadline": "Jan 30",
+    "deadlineDate": "2027-01-30",
+    "deadlinePassed": false,
+    "source": "Unstop",
+    "tags": [
+      "$10,000 Grant",
+      "Mentorship",
+      "Palo Alto Summit"
+    ],
+    "description": "An annual scholarship empowering undergraduate and graduate students pursuing computer science and engineering to solve critical global problems.",
+    "requirements": [
+      "Undergraduate or Master's student in computer science or related STEM fields",
+      "Passion for building reliable software for real-world operations",
+      "Short technical essay on distributed data integrity"
+    ],
+    "compensationOrGrant": "$10,000 Grant + All-expenses-paid Palo Alto Summit",
+    "url": "https://www.palantir.com/students",
+    "eligibilityBreakdown": {
+      "skillMatch": 89,
+      "academicAlignment": 92,
+      "timelineFit": 87,
+      "insights": [
+        "Broad software engineering knowledge aligns with enterprise data processing challenges"
+      ]
+    }
+  },
+  {
+    "id": "opp-108",
+    "title": "AI Cloud Platform Engineering Fellow",
+    "organization": "Microsoft Research",
+    "location": "Redmond, WA / Remote",
+    "type": "Internship",
+    "deadline": "Dec 10",
+    "deadlineDate": "2026-12-10",
+    "deadlinePassed": false,
+    "source": "Tech Job Shortlist",
+    "tags": [
+      "Cloud Systems",
+      "Distributed ML",
+      "$52/hr"
+    ],
+    "description": "Collaborate with Microsoft researchers optimizing large-scale model inference, kernel compilation, and serverless agent execution graphs on Azure.",
+    "requirements": [
+      "Experience with Python, TypeScript, or Go",
+      "Understanding of cloud infrastructure, REST APIs, and containerized deployments",
+      "Interest in large language model serving and optimization"
+    ],
+    "compensationOrGrant": "$52/hr + Full Tech Stipend",
+    "url": "https://careers.microsoft.com",
+    "eligibilityBreakdown": {
+      "skillMatch": 92,
+      "academicAlignment": 91,
+      "timelineFit": 94,
+      "insights": [
+        "Full-stack and cloud architectural exposure fits distributed agent deployment projects"
+      ]
+    }
+  },
+  {
+    "id": "opp-109",
+    "title": "Open Source AI Safety Fellowship",
+    "organization": "Stanford University HAI",
+    "location": "Stanford, CA / Hybrid",
+    "type": "Scholarship",
+    "deadline": "Feb 15",
+    "deadlineDate": "2027-02-15",
+    "deadlinePassed": false,
+    "source": "Stanford Portal",
+    "tags": [
+      "$50,000 Grant",
+      "HAI Residency",
+      "Research Proposal"
+    ],
+    "description": "A 9-month fellowship funding interdisciplinary scholars investigating AI model alignment, interpretability, and robust algorithmic governance.",
+    "requirements": [
+      "2-page research prospectus on safe agentic systems",
+      "Demonstrated proficiency in Python, ML, or data analysis",
+      "Undergraduate or graduate standing"
+    ],
+    "compensationOrGrant": "$50,000 Research Grant + Faculty Advisory",
+    "url": "https://hai.stanford.edu",
+    "eligibilityBreakdown": {
+      "skillMatch": 93,
+      "academicAlignment": 95,
+      "timelineFit": 86,
+      "insights": [
+        "Technical writing and ML fundamentals match HAI interdisciplinary alignment goals"
+      ]
+    }
+  },
+  {
+    "id": "opp-110",
+    "title": "Anthropic Prompt Engineering & Agent Hackathon",
+    "organization": "Devpost & Anthropic",
+    "location": "San Francisco, CA / Virtual",
+    "type": "Hackathon",
+    "deadline": "Dec 05-07",
+    "deadlineDate": "2026-12-07",
+    "deadlinePassed": false,
+    "source": "Devpost",
+    "tags": [
+      "$60,000 Pool",
+      "Claude SDK",
+      "Autonomous Agents"
+    ],
+    "description": "Construct multi-agent systems with tool use, structured outputs, and human-in-the-loop workflows.",
+    "requirements": [
+      "Individual or team submissions (up to 4 members)",
+      "Integration of agentic decision loops with live external APIs",
+      "Live interactive web app demo"
+    ],
+    "compensationOrGrant": "$60,000 Prize Pool + Anthropic Accelerator Fast-Track",
+    "url": "https://devpost.com",
+    "eligibilityBreakdown": {
+      "skillMatch": 97,
+      "academicAlignment": 93,
+      "timelineFit": 96,
+      "insights": [
+        "Direct match for student builders with experience in full-stack AI development"
+      ]
+    }
+  },
+  {
+    "id": "opp-111",
+    "title": "Emerging Tech Scholars Fellowship",
+    "organization": "Gates Millennium Foundation & WeMakeScholars",
+    "location": "Global",
+    "type": "Scholarship",
+    "deadline": "Feb 28",
+    "deadlineDate": "2027-02-28",
+    "deadlinePassed": false,
+    "source": "WeMakeScholars",
+    "tags": [
+      "Full Tuition Support",
+      "STEM Excellence",
+      "Global"
+    ],
+    "description": "A comprehensive merit-based grant providing academic tuition coverage and research travel stipends for promising computer science students globally.",
+    "requirements": [
+      "Enrolled in an accredited higher education institution",
+      "Demonstrated academic excellence and dedication to community upliftment",
+      "Two letters of recommendation"
+    ],
+    "compensationOrGrant": "Up to $25,000 Educational Grant",
+    "url": "https://www.gatesfoundation.org",
+    "eligibilityBreakdown": {
+      "skillMatch": 87,
+      "academicAlignment": 94,
+      "timelineFit": 89,
+      "insights": [
+        "Academic alignment meets global high-merit criteria"
+      ]
+    }
+  },
+  {
+    "id": "opp-112",
+    "title": "Full-Stack AI Developer Internship",
+    "organization": "OpenAI Ecosystem Lab",
+    "location": "San Francisco, CA / Hybrid",
+    "type": "Internship",
+    "deadline": "Jan 10",
+    "deadlineDate": "2027-01-10",
+    "deadlinePassed": false,
+    "source": "Tech Job Shortlist",
+    "tags": [
+      "Next.js/FastAPI",
+      "Agent Frameworks",
+      "$60/hr"
+    ],
+    "description": "Build dynamic developer tools, code generation benchmarks, and agent orchestration sandboxes for the next generation of generative AI products.",
+    "requirements": [
+      "Experience with TypeScript, React, Python, and modern web frameworks",
+      "Strong understanding of RESTful API design and asynchronous data flows",
+      "Passion for sleek user interfaces and responsive agentic applications"
+    ],
+    "compensationOrGrant": "$60/hr + Full Benefits & Housing Support",
+    "url": "https://openai.com/careers",
+    "eligibilityBreakdown": {
+      "skillMatch": 96,
+      "academicAlignment": 92,
+      "timelineFit": 94,
+      "insights": [
+        "Your TypeScript and Python skills exceed baseline internship prerequisites"
+      ]
+    }
+  }
+]

@@ -4,7 +4,8 @@ import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 5000;
+const OPPORTRA_BACKEND_URL = process.env.OPPORTRA_BACKEND_URL || "http://127.0.0.1:8000";
 
 app.use(express.json({ limit: "15mb" }));
 app.use(express.urlencoded({ extended: true, limit: "15mb" }));
@@ -510,9 +511,54 @@ app.post("/api/profile", (req, res) => {
   });
 });
 
+// ----------------- OPPORTRA FASTAPI AGENT PROXY ROUTES ----------------- //
+
+// Forward match-all to FastAPI
+app.post(["/api/match-all", "/api/opportra/match-all"], async (req, res) => {
+  try {
+    const fastApiResponse = await fetch(`${OPPORTRA_BACKEND_URL}/match-all`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await fastApiResponse.json();
+    return res.status(fastApiResponse.status).json(data);
+  } catch (err: any) {
+    console.warn(`[Proxy Warning] FastAPI backend at ${OPPORTRA_BACKEND_URL} unreachable:`, err.message);
+    return res.status(503).json({ error: "Opportra AI Agent Backend is currently starting or unreachable.", fallback: true });
+  }
+});
+
+// Forward run-agent to FastAPI
+app.all(["/api/run-agent", "/api/opportra/run-agent"], async (req, res) => {
+  try {
+    const fastApiResponse = await fetch(`${OPPORTRA_BACKEND_URL}/run-agent`, {
+      method: req.method,
+      headers: { "Content-Type": "application/json" },
+      body: req.method === "POST" ? JSON.stringify(req.body) : undefined,
+    });
+    const data = await fastApiResponse.json();
+    return res.status(fastApiResponse.status).json(data);
+  } catch (err: any) {
+    console.warn(`[Proxy Warning] FastAPI backend at ${OPPORTRA_BACKEND_URL} unreachable:`, err.message);
+    return res.json({ status: "Agent running", fallback: true });
+  }
+});
+
+// Forward opportunities retrieval to FastAPI
+app.get(["/api/opportunities", "/api/opportra/opportunities"], async (_req, res) => {
+  try {
+    const fastApiResponse = await fetch(`${OPPORTRA_BACKEND_URL}/opportunities`);
+    const data = await fastApiResponse.json();
+    return res.status(fastApiResponse.status).json(data);
+  } catch (err: any) {
+    return res.status(503).json({ error: "Unable to reach opportunities backend.", fallback: true });
+  }
+});
+
 // Health check endpoint
 app.get("/api/health", (_req, res) => {
-  res.json({ status: "healthy", timestamp: new Date().toISOString() });
+  res.json({ status: "healthy", timestamp: new Date().toISOString(), port: PORT, backendProxy: OPPORTRA_BACKEND_URL });
 });
 
 // ----------------- VITE MIDDLEWARE SETUP ----------------- //

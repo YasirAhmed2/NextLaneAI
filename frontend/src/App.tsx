@@ -25,6 +25,7 @@ import { PremiumModal } from './components/PremiumModal';
 import { SettingsModal } from './components/SettingsModal';
 import { AuthView } from './components/AuthView';
 import { authService } from './services/authService';
+import { opportraService } from './services/opportraService';
 
 const EMPTY_USER_PROFILE: UserProfile = {
   fullName: '',
@@ -62,6 +63,7 @@ export default function App() {
   const [selectedOpportunity, setSelectedOpportunity] = useState<Opportunity | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isPremiumOpen, setIsPremiumOpen] = useState(false);
+  const [isAgentRefreshing, setIsAgentRefreshing] = useState(false);
 
   // Sync theme to document element, body and localStorage
   useEffect(() => {
@@ -204,25 +206,41 @@ export default function App() {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   };
 
-  const handleSaveProfile = (newProfile: UserProfile) => {
+  const handleSaveProfile = async (newProfile: UserProfile) => {
     setUserProfile(newProfile);
     authService.saveProfile(newProfile);
     
-    // Dynamic recalculation: if user skills match, boost scores
-    setOpportunities((prev) =>
-      prev.map((opp) => {
-        const matchingSkills = newProfile.skills.filter((s) =>
-          opp.requirements.some((r) => r.toLowerCase().includes(s.toLowerCase())) ||
-          opp.aiMatchReason.toLowerCase().includes(s.toLowerCase())
-        );
-        const bonus = Math.min(10, matchingSkills.length * 3);
-        const newScore = Math.min(99, Math.max(75, 82 + bonus));
-        return {
-          ...opp,
-          matchScore: newScore
-        };
-      })
-    );
+    // Call FastAPI AI Agent matching
+    try {
+      const liveMatched = await opportraService.matchAll(newProfile);
+      setOpportunities(liveMatched);
+    } catch (err) {
+      console.warn('Match calculation warning:', err);
+    }
+  };
+
+  const handleRefreshAgent = async () => {
+    setIsAgentRefreshing(true);
+    try {
+      await opportraService.runAgent();
+      const updated = await opportraService.matchAll(userProfile);
+      setOpportunities(updated);
+      setNotifications((prev) => [
+        {
+          id: `notif-${Date.now()}`,
+          title: 'Opportunity Pipeline Refreshed',
+          description: 'AI agent completed autonomous discovery & scoring cycle.',
+          time: 'Just now',
+          read: false,
+          type: 'match'
+        },
+        ...prev
+      ]);
+    } catch (err) {
+      console.warn('Agent refresh error:', err);
+    } finally {
+      setIsAgentRefreshing(false);
+    }
   };
 
   const savedCount = opportunities.filter((o) => o.isSaved).length;
@@ -315,6 +333,8 @@ export default function App() {
               userProfile={userProfile}
               isAuthenticated={isAuthenticated}
               onOpenAuth={handleOpenAuth}
+              onRefreshAgent={handleRefreshAgent}
+              isRefreshing={isAgentRefreshing}
             />
           )}
 
