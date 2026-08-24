@@ -32,7 +32,7 @@ export const authService = {
   },
 
   // Register new account
-  async register(username: string, email: string, password: string): Promise<{ success: boolean; message: string; email: string; devOtpHint?: string }> {
+  async register(username: string, email: string, password: string): Promise<{ success: boolean; message: string; email: string }> {
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
@@ -45,25 +45,6 @@ export const authService = {
       }
       return data;
     } catch (err: any) {
-      // Fallback for mock/client-side standalone if server route is unavailable
-      if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('404'))) {
-        const mockOtp = Math.floor(100000 + Math.random() * 900000).toString();
-        const pendingUser: AuthUser = {
-          id: `usr_${Date.now()}`,
-          username: username.trim(),
-          email: email.trim().toLowerCase(),
-          isVerified: false,
-          profileComplete: false,
-        };
-        localStorage.setItem(`nextlane_otp_${email.toLowerCase()}`, mockOtp);
-        localStorage.setItem(`nextlane_pending_${email.toLowerCase()}`, JSON.stringify(pendingUser));
-        return {
-          success: true,
-          message: `Verification code sent to ${email}`,
-          email,
-          devOtpHint: mockOtp,
-        };
-      }
       throw err;
     }
   },
@@ -106,7 +87,7 @@ export const authService = {
   },
 
   // Resend OTP
-  async resendOtp(email: string, purpose: 'registration' | 'reset' = 'registration'): Promise<{ success: boolean; message: string; devOtpHint?: string }> {
+  async resendOtp(email: string, purpose: 'registration' | 'reset' = 'registration'): Promise<{ success: boolean; message: string }> {
     try {
       const res = await fetch('/api/auth/resend-otp', {
         method: 'POST',
@@ -119,21 +100,12 @@ export const authService = {
       }
       return data;
     } catch (err: any) {
-      if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('404'))) {
-        const mockOtp = Math.floor(100000 + Math.random() * 900000).toString();
-        localStorage.setItem(`nextlane_otp_${email.toLowerCase()}`, mockOtp);
-        return {
-          success: true,
-          message: `Fresh verification code sent to ${email}`,
-          devOtpHint: mockOtp,
-        };
-      }
       throw err;
     }
   },
 
   // Login
-  async login(username: string, password: string): Promise<{ success: boolean; token?: string; user?: AuthUser; requiresVerification?: boolean; email?: string; devOtpHint?: string }> {
+  async login(username: string, password: string): Promise<{ success: boolean; token?: string; user?: AuthUser; requiresVerification?: boolean; email?: string }> {
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
@@ -173,7 +145,7 @@ export const authService = {
   },
 
   // Forgot password - Step A
-  async requestPasswordReset(email: string): Promise<{ success: boolean; message: string; devOtpHint?: string }> {
+  async requestPasswordReset(email: string): Promise<{ success: boolean; message: string }> {
     try {
       const res = await fetch('/api/auth/forgot-password/request', {
         method: 'POST',
@@ -186,15 +158,6 @@ export const authService = {
       }
       return data;
     } catch (err: any) {
-      if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('404'))) {
-        const mockOtp = Math.floor(100000 + Math.random() * 900000).toString();
-        localStorage.setItem(`nextlane_reset_otp_${email.toLowerCase()}`, mockOtp);
-        return {
-          success: true,
-          message: `Password reset code sent to ${email}`,
-          devOtpHint: mockOtp,
-        };
-      }
       throw err;
     }
   },

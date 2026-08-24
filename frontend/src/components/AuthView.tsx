@@ -31,7 +31,6 @@ export const AuthView: React.FC<AuthViewProps> = ({
   const [otpCode, setOtpCode] = useState(['', '', '', '', '', '']);
   const [otpTargetEmail, setOtpTargetEmail] = useState('');
   const [resendCooldown, setResendCooldown] = useState(0);
-  const [devOtpHint, setDevOtpHint] = useState<string | null>(null);
 
   // Forgot Password State
   const [resetEmail, setResetEmail] = useState('');
@@ -90,13 +89,10 @@ export const AuthView: React.FC<AuthViewProps> = ({
 
     setIsLoading(true);
     try {
-      const result = await authService.register(username.trim(), email.trim(), password);
+      await authService.register(username.trim(), email.trim(), password);
       setOtpTargetEmail(email.trim().toLowerCase());
       setResendCooldown(60);
-      if (result.devOtpHint) {
-        setDevOtpHint(result.devOtpHint);
-      }
-      setSuccessMessage(`Verification code sent to ${email.trim()}`);
+      setSuccessMessage(`A 30-minute verification code was sent to ${email.trim()}`);
       setMode('otp');
     } catch (err: any) {
       setErrorMessage(err.message || 'Registration failed.');
@@ -121,8 +117,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
       if (result.requiresVerification && result.email) {
         setOtpTargetEmail(result.email);
         setResendCooldown(45);
-        if (result.devOtpHint) setDevOtpHint(result.devOtpHint);
-        setErrorMessage('Your email is not verified yet. A verification code has been dispatched.');
+        setErrorMessage('Your email is not verified yet. A 30-minute verification code has been dispatched.');
         setMode('otp');
         return;
       }
@@ -203,10 +198,9 @@ export const AuthView: React.FC<AuthViewProps> = ({
     setIsLoading(true);
     try {
       const emailToUse = purpose === 'reset' ? resetEmail : otpTargetEmail;
-      const res = await authService.resendOtp(emailToUse, purpose);
+      await authService.resendOtp(emailToUse, purpose);
       setResendCooldown(60);
-      if (res.devOtpHint) setDevOtpHint(res.devOtpHint);
-      setSuccessMessage(`Fresh verification code sent to ${emailToUse}`);
+      setSuccessMessage(`Fresh verification code sent to ${emailToUse} (valid for 30 minutes)`);
     } catch (err: any) {
       setErrorMessage(err.message || 'Failed to resend code.');
     } finally {
@@ -226,10 +220,9 @@ export const AuthView: React.FC<AuthViewProps> = ({
 
     setIsLoading(true);
     try {
-      const res = await authService.requestPasswordReset(resetEmail.trim().toLowerCase());
+      await authService.requestPasswordReset(resetEmail.trim().toLowerCase());
       setResendCooldown(60);
-      if (res.devOtpHint) setDevOtpHint(res.devOtpHint);
-      setSuccessMessage(`If an account exists, a reset code was sent to ${resetEmail.trim()}`);
+      setSuccessMessage(`If an account exists, a 30-minute reset code was sent to ${resetEmail.trim()}`);
       setOtpCode(['', '', '', '', '', '']);
       setMode('forgot_verify');
     } catch (err: any) {
@@ -388,23 +381,11 @@ export const AuthView: React.FC<AuthViewProps> = ({
           )}
         </AnimatePresence>
 
-        {/* Dev OTP Helper Banner for quick preview testing */}
-        {devOtpHint && (
-          <div className="p-2.5 rounded-xl bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#B38600] dark:text-[#D4AF37] text-xs font-semibold flex items-center justify-between mb-4">
-            <div className="flex items-center gap-1.5">
-              <span className="material-symbols-outlined text-sm">mark_email_read</span>
-              <span>Verification Code: <strong className="tracking-widest font-mono text-sm">{devOtpHint}</strong></span>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                const digits = devOtpHint.split('');
-                setOtpCode(digits);
-              }}
-              className="text-[10px] underline uppercase tracking-wider font-bold cursor-pointer hover:opacity-80"
-            >
-              Auto-fill
-            </button>
+        {/* Verification Notification Notice */}
+        {(mode === 'otp' || mode === 'forgot_verify') && (
+          <div className="p-3 rounded-xl bg-[#D4AF37]/10 border border-[#D4AF37]/35 text-[#B38600] dark:text-[#D4AF37] text-xs font-semibold flex items-center gap-2 mb-4">
+            <span className="material-symbols-outlined text-sm shrink-0">mark_email_read</span>
+            <span>Check your inbox for the 6-digit code. Valid for <strong>30 minutes</strong>.</span>
           </div>
         )}
 
