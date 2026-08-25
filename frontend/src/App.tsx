@@ -64,6 +64,14 @@ export default function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isPremiumOpen, setIsPremiumOpen] = useState(false);
   const [isAgentRefreshing, setIsAgentRefreshing] = useState(false);
+  const [appliedIds, setAppliedIds] = useState<string[]>(() => {
+    try {
+      const stored = localStorage.getItem('nextlane_applied_ids');
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
 
   // Sync theme to document element, body and localStorage
   useEffect(() => {
@@ -206,6 +214,14 @@ export default function App() {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   };
 
+  const handleMarkApplied = (oppId: string) => {
+    setAppliedIds((prev) => {
+      const next = prev.includes(oppId) ? prev.filter((id) => id !== oppId) : [...prev, oppId];
+      localStorage.setItem('nextlane_applied_ids', JSON.stringify(next));
+      return next;
+    });
+  };
+
   const handleSaveProfile = async (newProfile: UserProfile) => {
     setUserProfile(newProfile);
     authService.saveProfile(newProfile);
@@ -214,6 +230,30 @@ export default function App() {
     try {
       const liveMatched = await opportraService.matchAll(newProfile);
       setOpportunities(liveMatched);
+
+      // Trigger 24-hour deadline reminder sentry check if user email is active
+      const userEmail = currentUser?.email || (userProfile as any).email;
+      if (userEmail) {
+        const reminderRes = await opportraService.checkDeadlineReminders(
+          userEmail,
+          newProfile.fullName || currentUser?.username || 'User',
+          liveMatched,
+          appliedIds
+        );
+        if (reminderRes.reminderSent) {
+          setNotifications((prev) => [
+            {
+              id: `notif-${Date.now()}`,
+              title: '🚨 Deadline Alert Dispatched',
+              description: reminderRes.message || 'Urgent 24h deadline reminder sent to your inbox.',
+              time: 'Just now',
+              read: false,
+              type: 'match'
+            },
+            ...prev
+          ]);
+        }
+      }
     } catch (err) {
       console.warn('Match calculation warning:', err);
     }
@@ -225,11 +265,23 @@ export default function App() {
       await opportraService.runAgent();
       const updated = await opportraService.matchAll(userProfile);
       setOpportunities(updated);
+
+      // Check deadline reminders
+      const userEmail = currentUser?.email || (userProfile as any).email;
+      if (userEmail) {
+        await opportraService.checkDeadlineReminders(
+          userEmail,
+          userProfile.fullName || currentUser?.username || 'User',
+          updated,
+          appliedIds
+        );
+      }
+
       setNotifications((prev) => [
         {
           id: `notif-${Date.now()}`,
           title: 'Opportunity Pipeline Refreshed',
-          description: 'AI agent completed autonomous discovery & scoring cycle.',
+          description: 'AI agent completed autonomous discovery & scoring cycle with real listings.',
           time: 'Just now',
           read: false,
           type: 'match'
@@ -371,6 +423,8 @@ export default function App() {
         onClose={() => setSelectedOpportunity(null)}
         onToggleSave={handleToggleSave}
         userProfile={userProfile}
+        onMarkApplied={handleMarkApplied}
+        isApplied={selectedOpportunity ? appliedIds.includes(selectedOpportunity.id) : false}
       />
 
       {/* Premium Membership Modal */}
