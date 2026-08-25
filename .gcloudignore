@@ -1,0 +1,16 @@
+.git
+.gitignore
+frontend/node_modules
+frontend/.env
+frontend/bun.lock
+frontend/package-lock.json
+**/__pycache__
+**/*.pyc
+backend/.env
+backend/data/opportunities_store.json
+*.md
+.agents
+production_artifacts
+qa_report.md
+nextlane_ai_audit_report.md
+details.md
