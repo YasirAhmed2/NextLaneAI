@@ -39,6 +39,7 @@ class OpportunitySchema(BaseModel):
 class UserProfileRequest(BaseModel):
     name: Optional[str] = ""
     fullName: Optional[str] = ""
+    email: Optional[str] = ""           # Used for proactive deadline email alerts
     education: Optional[str] = ""
     educationLevel: Optional[str] = ""
     skills: List[str] = Field(default_factory=list)

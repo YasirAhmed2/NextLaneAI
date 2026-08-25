@@ -7,3 +7,5 @@ beautifulsoup4>=4.12.3
 google-genai>=1.0.0
 google-cloud-firestore>=2.14.0
 python-dotenv>=1.0.1
+apscheduler>=3.10.0
+lxml>=5.1.0
