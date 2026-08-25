@@ -1,0 +1,130 @@
+"""
+utils/retry.py — NextLane AI
+Provides production-grade HTTP fetch with exponential backoff, rate-limit
+handling, and silent fallback. Used by all scrapers to handle transient errors.
+"""
+import time
+import logging
+from typing import Optional, Dict, Any
+
+import requests
+from requests import Response
+
+logger = logging.getLogger("nextlane_ai")
+
+
+def fetch_with_retry(
+    url: str,
+    headers: Optional[Dict[str, str]] = None,
+    timeout: int = 10,
+    max_retries: int = 3,
+    backoff_base: float = 1.5,
+    method: str = "GET",
+    **kwargs: Any,
+) -> Optional[Response]:
+    """
+    Performs an HTTP GET (or specified method) with exponential backoff retry.
+
+    Handles:
+      - 429 Too Many Requests  → waits backoff seconds then retries
+      - 503 Service Unavailable → retries with backoff
+      - Timeout exceptions      → retries with short delay
+      - Connection errors       → retries with backoff
+      - 4xx client errors       → returns None immediately (no retry)
+      - 5xx server errors       → retries with backoff
+
+    Args:
+        url:          Target URL to fetch.
+        headers:      Optional dict of HTTP headers.
+        timeout:      Per-request timeout in seconds.
+        max_retries:  Total number of attempts (including first).
+        backoff_base: Base multiplier for exponential backoff (seconds).
+        method:       HTTP method: "GET" or "POST".
+        **kwargs:     Additional kwargs passed to requests.request().
+
+    Returns:
+        requests.Response if successful (status 200), else None.
+    """
+    attempt = 0
+    last_exception: Optional[Exception] = None
+
+    while attempt < max_retries:
+        wait_secs = backoff_base ** attempt  # 1.5, 2.25, 3.375 ...
+
+        try:
+            response = requests.request(
+                method,
+                url,
+                headers=headers,
+                timeout=timeout,
+                **kwargs,
+            )
+
+            if response.status_code == 200:
+                return response
+
+            # Rate limited — wait longer
+            if response.status_code == 429:
+                retry_after = int(response.headers.get("Retry-After", wait_secs * 2))
+                logger.warning(
+                    "[RETRY] 429 rate limited at %s — waiting %ds (attempt %d/%d)",
+                    url, retry_after, attempt + 1, max_retries
+                )
+                time.sleep(retry_after)
+                attempt += 1
+                continue
+
+            # Server errors — retry
+            if response.status_code in (500, 502, 503, 504):
+                logger.warning(
+                    "[RETRY] %d server error at %s — backoff %.1fs (attempt %d/%d)",
+                    response.status_code, url, wait_secs, attempt + 1, max_retries
+                )
+                time.sleep(wait_secs)
+                attempt += 1
+                continue
+
+            # 4xx client error — not retryable
+            if 400 <= response.status_code < 500:
+                logger.warning(
+                    "[RETRY] %d client error at %s — not retrying",
+                    response.status_code, url
+                )
+                return None
+
+            # Other non-200 — retry once
+            logger.warning(
+                "[RETRY] Unexpected status %d at %s — backoff %.1fs",
+                response.status_code, url, wait_secs
+            )
+            time.sleep(wait_secs)
+            attempt += 1
+
+        except requests.exceptions.Timeout:
+            logger.warning(
+                "[RETRY] Timeout at %s — backoff %.1fs (attempt %d/%d)",
+                url, wait_secs, attempt + 1, max_retries
+            )
+            time.sleep(wait_secs)
+            attempt += 1
+            last_exception = TimeoutError(f"Timeout after {timeout}s: {url}")
+
+        except requests.exceptions.ConnectionError as e:
+            logger.warning(
+                "[RETRY] Connection error at %s — backoff %.1fs (attempt %d/%d): %s",
+                url, wait_secs, attempt + 1, max_retries, str(e)
+            )
+            time.sleep(wait_secs)
+            attempt += 1
+            last_exception = e
+
+        except requests.exceptions.RequestException as e:
+            logger.error("[RETRY] Unrecoverable request error at %s: %s", url, str(e))
+            return None
+
+    if last_exception:
+        logger.error(
+            "[RETRY] All %d attempts exhausted for %s. Last error: %s",
+            max_retries, url, str(last_exception)
+        )
+    return None
