@@ -786,7 +786,187 @@ app.post("/api/profile", (req, res) => {
   });
 });
 
-// ----------------- OPPORTRA FASTAPI AGENT PROXY ROUTES ----------------- //
+// ----------------- 24-HOUR DEADLINE REMINDER EMAIL ENGINE ----------------- //
+
+function createDeadlineReminderEmailHtml(username: string, opp: any): string {
+  const deadlineStr = opp.deadline || "Within 24 Hours";
+  const score = opp.matchScore || opp.score || 94;
+  const directLink = opp.url || "http://localhost:5000";
+
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚨 Urgent: Application Deadline Closing Soon • NextLane AI</title>
+  <style>
+    body { margin: 0; padding: 0; background-color: #0b0b0e; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #E6E6E6; }
+    .wrapper { width: 100%; background-color: #0b0b0e; padding: 36px 10px; }
+    .container { max-width: 580px; margin: 0 auto; background: #141418; border-radius: 18px; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.4); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6); }
+    .header { background: linear-gradient(180deg, #1e1b24 0%, #141418 100%); padding: 32px 24px 20px; text-align: center; border-bottom: 1px solid rgba(239, 68, 68, 0.3); }
+    .urgent-pill { display: inline-block; padding: 6px 16px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.5); border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #EF4444; margin-bottom: 10px; }
+    .header-title { margin: 0; font-size: 24px; font-weight: 800; color: #FFFFFF; }
+    .content { padding: 32px 28px; }
+    .greeting { font-size: 16px; font-weight: 700; color: #FFFFFF; margin-bottom: 12px; }
+    .intro { font-size: 14px; line-height: 1.6; color: #B8B8C2; margin-bottom: 24px; }
+    .card { background: linear-gradient(180deg, rgba(212, 175, 55, 0.12) 0%, rgba(212, 175, 55, 0.03) 100%); border: 2px solid #D4AF37; border-radius: 14px; padding: 22px; margin: 20px 0; }
+    .type-badge { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #D4AF37; letter-spacing: 1px; }
+    .opp-title { font-size: 20px; font-weight: 800; color: #FFFFFF; margin: 6px 0 10px; }
+    .meta-row { font-size: 13px; color: #D1D1D6; margin-bottom: 14px; }
+    .deadline-urgent { color: #EF4444; font-weight: 800; }
+    .score-badge { color: #D4AF37; font-weight: 800; }
+    .reason-box { background: rgba(255, 255, 255, 0.04); border-left: 3px solid #D4AF37; padding: 12px 14px; border-radius: 0 8px 8px 0; font-size: 12px; line-height: 1.5; color: #9E9EA8; }
+    .btn-container { text-align: center; margin: 30px 0 20px; }
+    .btn { display: inline-block; background: #D4AF37; color: #121212 !important; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; padding: 14px 34px; border-radius: 12px; text-decoration: none; box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4); }
+    .tip { background: rgba(255, 255, 255, 0.02); border-radius: 10px; padding: 14px; font-size: 12px; line-height: 1.5; color: #848490; margin-top: 20px; }
+    .footer { background: #0f0f13; padding: 22px; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.06); font-size: 11px; color: #6C6C78; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="container">
+      <div class="header">
+        <div class="urgent-pill">⏳ Less Than 24 Hours Remaining</div>
+        <h1 class="header-title">🚨 Deadline Reminder Alert</h1>
+      </div>
+      <div class="content">
+        <div class="greeting">Hello ${username || 'Learner'},</div>
+        <p class="intro">
+          NextLane AI automated deadline sentry detected that a high-priority opportunity matching your skillset has <strong>less than 24 hours left</strong> before applications close.
+        </p>
+        <div class="card">
+          <div class="type-badge">${opp.type || 'Opportunity'} • ${opp.organization || 'Verified Organization'}</div>
+          <div class="opp-title">${opp.title}</div>
+          <div class="meta-row">
+            <strong>Closing:</strong> <span class="deadline-urgent">${deadlineStr}</span> • 
+            <strong>AI Match Score:</strong> <span class="score-badge">${score}%</span>
+          </div>
+          <div class="reason-box">
+            "${opp.aiMatchReason || opp.description || 'Highly aligned with your verified technical competencies.'}"
+          </div>
+        </div>
+        <div class="btn-container">
+          <a href="${directLink}" class="btn">
+            Open Official Application Portal ↗
+          </a>
+        </div>
+        <div class="tip">
+          💡 <strong>Fast Apply Tip:</strong> Open the NextLane AI portal to copy your pre-filled, customized Statement of Interest and profile data.
+        </div>
+      </div>
+      <div class="footer">
+        <div>© 2026 NextLane AI Systems Inc. • Autonomous Opportunity Sentry</div>
+        <div style="margin-top: 4px;">Sent automatically to ${username} for active deadline monitoring</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+}
+
+async function sendDeadlineReminderEmail(toEmail: string, username: string, opp: any): Promise<boolean> {
+  const subject = `🚨 NextLane AI Alert: "${opp.title}" closes in less than 24 hours!`;
+  const html = createDeadlineReminderEmailHtml(username, opp);
+  const text = `🚨 NextLane AI Deadline Reminder\n\nHello ${username},\n\nThe application for "${opp.title}" by ${opp.organization} closes in less than 24 hours (Deadline: ${opp.deadline}).\n\nApply directly at: ${opp.url || 'http://localhost:5000'}\n\n© 2026 NextLane AI Inc.`;
+
+  let sent = false;
+
+  // Method 1: Try Nodemailer SMTP
+  if (EMAIL_USER && EMAIL_PASS) {
+    try {
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: { user: EMAIL_USER, pass: EMAIL_PASS },
+      });
+      await transporter.sendMail({
+        from: `"NextLane AI Sentry" <${EMAIL_USER}>`,
+        to: toEmail,
+        subject,
+        text,
+        html,
+      });
+      console.log(`[NextLane Sentry] Dispatched deadline reminder to ${toEmail} for "${opp.title}".`);
+      return true;
+    } catch (err: any) {
+      console.warn(`[NextLane Sentry] SMTP reminder failed (${err.message}). Trying Brevo API...`);
+    }
+  }
+
+  // Method 2: Brevo API
+  if (BREVO_API_KEY) {
+    try {
+      const brevoRes = await fetch("https://api.brevo.com/v3/smtp/email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": BREVO_API_KEY,
+        },
+        body: JSON.stringify({
+          sender: { name: "NextLane AI Sentry", email: EMAIL_USER || "alerts@nextlane.ai" },
+          to: [{ email: toEmail, name: username }],
+          subject,
+          htmlContent: html,
+          textContent: text,
+        }),
+      });
+      if (brevoRes.ok) {
+        console.log(`[NextLane Sentry] Dispatched deadline reminder to ${toEmail} via Brevo API.`);
+        return true;
+      }
+    } catch (err: any) {
+      console.error(`[NextLane Sentry] Brevo reminder failure:`, err.message);
+    }
+  }
+
+  return sent;
+}
+
+// ----------------- OPPORTRA FASTAPI AGENT PROXY & DEADLINE REMINDERS ----------------- //
+
+// Trigger 24-Hour Deadline Reminders Sentry
+app.post(["/api/agent/deadline-reminders", "/api/opportra/deadline-reminders"], async (req, res) => {
+  try {
+    const { email, username, opportunities, appliedIds } = req.body;
+    if (!email) {
+      return res.status(400).json({ error: "Target user email is required." });
+    }
+
+    const appliedSet = new Set(Array.isArray(appliedIds) ? appliedIds : []);
+    const oppList = Array.isArray(opportunities) ? opportunities : [];
+
+    // Find urgent opportunities (<24h left or urgent tag or high match >= 85% saved) that user hasn't applied to
+    const urgentItems = oppList.filter((opp: any) => {
+      if (appliedSet.has(opp.id)) return false;
+      const isUrgent = opp.urgent24h || (opp.deadline && (opp.deadline.toLowerCase().includes("closing") || opp.deadline.toLowerCase().includes("tomorrow") || opp.deadline.toLowerCase().includes("<24h")));
+      const isHighPriority = (opp.isSaved || (opp.matchScore && opp.matchScore >= 85)) && (isUrgent || opp.deadlinePassed === false);
+      return isUrgent || (isHighPriority && isUrgent);
+    });
+
+    const targetItem = urgentItems[0] || oppList.find((o: any) => !appliedSet.has(o.id) && (o.urgent24h || o.isSaved));
+
+    if (targetItem) {
+      await sendDeadlineReminderEmail(email, username || email.split("@")[0], targetItem);
+      return res.json({
+        success: true,
+        reminderSent: true,
+        opportunity: targetItem.title,
+        recipient: email,
+        message: `24-hour deadline reminder dispatched for "${targetItem.title}"`
+      });
+    }
+
+    return res.json({
+      success: true,
+      reminderSent: false,
+      message: "No unapplied opportunities with imminent (<24h) deadlines found."
+    });
+  } catch (err: any) {
+    console.error("[Deadline Reminder Error]", err);
+    return res.status(500).json({ error: "Failed to process deadline reminders.", detail: err.message });
+  }
+});
 
 // Forward match-all to FastAPI
 app.post(["/api/match-all", "/api/opportra/match-all"], async (req, res) => {

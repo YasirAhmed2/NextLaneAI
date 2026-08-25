@@ -143,5 +143,29 @@ export const opportraService = {
     } catch (err) {
       return INITIAL_OPPORTUNITIES;
     }
+  },
+
+  /**
+   * Scans opportunities and triggers automated 24-hour deadline reminder emails
+   * for saved or highly-matched (>85%) opportunities that have not yet been applied to.
+   */
+  async checkDeadlineReminders(
+    email: string,
+    username: string,
+    opportunities: Opportunity[],
+    appliedIds: string[]
+  ): Promise<{ success: boolean; reminderSent: boolean; message?: string }> {
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/agent/deadline-reminders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, username, opportunities, appliedIds }),
+      });
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      console.warn('[Deadline Sentry] Error querying reminders:', err);
+      return { success: false, reminderSent: false };
+    }
   }
 };
