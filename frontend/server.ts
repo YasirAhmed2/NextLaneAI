@@ -13,10 +13,16 @@ const PORT = process.env.PORT ? parseInt(process.env.PORT) : 5000;
 const OPPORTRA_BACKEND_URL = process.env.OPPORTRA_BACKEND_URL || "http://127.0.0.1:8000";
 
 // Security & Email Configuration
-const JWT_SECRET = process.env.JWT_SECRET || "7gwiQpkmXvc45F9N4j";
-const EMAIL_USER = process.env.EMAIL_USER || "yasirahmed9921@gmail.com";
-const EMAIL_PASS = (process.env.EMAIL_PASS || "xbww dzpr ftlu vozz").replace(/\s+/g, "");
-const BREVO_API_KEY = process.env.BREVO_API_KEY || "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";
+// IMPORTANT: All secrets must be set as environment variables.
+// Never hardcode real secrets here. See frontend/.env.example for setup.
+const JWT_SECRET = process.env.JWT_SECRET || "";
+const EMAIL_USER = process.env.EMAIL_USER || "";
+const EMAIL_PASS = (process.env.EMAIL_PASS || "").replace(/\s+/g, "");
+const BREVO_API_KEY = process.env.BREVO_API_KEY || "";
+
+if (!JWT_SECRET) {
+  console.warn("[WARN] JWT_SECRET not set in environment — using insecure fallback. Set it in .env!");
+}
 
 // 30 Minutes OTP Expiration
 const OTP_EXPIRY_MS = 30 * 60 * 1000;
