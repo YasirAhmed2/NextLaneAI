@@ -21,12 +21,17 @@ from models.schemas import (
     AgentExecutionResponse,
     TailorCvRequest,
     LetterGeneratorRequest,
+    GoalDrivenAgentRequest,
+    AnalyzeMissedRequest,
+    UserFeedbackRequest,
 )
 from services.agent_orchestrator import run_agent_sync, agent_orchestrator
 from services.gemini_service import gemini_service
 from services.firestore_service import firestore_service
 from services.notification_service import notification_service
 from services.assistant_service import assistant_service
+from services.missed_analysis import missed_analysis_engine
+from services.feedback_service import feedback_service
 from utils.logger import log_event, log_error, log_agent_step
 
 router = APIRouter(tags=["Agent Orchestration"])
@@ -356,3 +361,128 @@ async def generate_letter_endpoint(payload: LetterGeneratorRequest) -> Dict[str,
     except Exception as e:
         log_error("route_generate_letter", e)
         raise HTTPException(status_code=500, detail=f"Letter generation failed: {str(e)}")
+
+
+# ── POST /agent/run-with-goal (Goal-Driven Agent Workflow) ────────────────────
+
+@router.post("/agent/run-with-goal")
+@router.post("/api/agent/run-with-goal")
+async def run_agent_with_goal_endpoint(
+    background_tasks: BackgroundTasks,
+    payload: GoalDrivenAgentRequest,
+) -> Dict[str, Any]:
+    """
+    Triggers the Goal-Driven Autonomous Agent Workflow.
+    Accepts an explicit strategic goal (e.g., 'Find fully funded master's scholarships in AI').
+    """
+    global _agent_state
+
+    profile = payload.profile
+    goal = payload.goal.strip()
+    force_rescrape = payload.forceRescrape or False
+
+    if profile:
+        user_dict = {
+            "name": profile.get_effective_name(),
+            "fullName": profile.get_effective_name(),
+            "email": getattr(profile, "email", "") or "",
+            "location": profile.get_effective_location(),
+            "skills": profile.get_effective_skills(),
+            "education": profile.get_effective_education(),
+            "interests": profile.get_effective_interests(),
+        }
+    else:
+        user_dict = {"name": "GoalSeeker", "skills": [], "interests": []}
+
+    _agent_state["status"] = "running (goal_driven)"
+    _agent_state["last_run"] = datetime.datetime.utcnow().isoformat() + "Z"
+
+    def _bg_task():
+        global _agent_state
+        try:
+            log_agent_step("goal_driven_bg_start", f"goal='{goal[:50]}' user='{user_dict.get('name')}'")
+            result = run_agent_sync(user_dict, force_rescrape=force_rescrape, context="goal_driven", goal=goal)
+            _agent_state["status"] = "idle"
+            _agent_state["last_result"] = {
+                "goal": goal,
+                "isGoalDriven": True,
+                "opportunities_scraped": result.get("opportunities_scraped", 0),
+                "matched_count": result.get("matched_count", 0),
+                "duration_ms": result.get("duration_ms", 0),
+            }
+            _agent_state["last_trace"] = {
+                "user": user_dict.get("name"),
+                "goal": goal,
+                "context": "goal_driven",
+                "timestamp": result.get("timestamp"),
+                "duration_ms": result.get("duration_ms", 0),
+                "matched_count": result.get("matched_count", 0),
+            }
+            _agent_state["last_steps_log"] = result.get("steps_log", [])
+            _agent_state["runs_completed"] = _agent_state.get("runs_completed", 0) + 1
+        except Exception as e:
+            _agent_state["status"] = "error"
+            log_error("goal_driven_bg_task", e)
+
+    background_tasks.add_task(_bg_task)
+
+    return {
+        "status": "Goal-Driven Agent running",
+        "message": f"Strategic agent pipeline initiated for goal: '{goal}'",
+        "goal": goal,
+        "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
+    }
+
+
+# ── POST /agent/analyze-missed (Isolated Missed Opportunity Analysis) ────────
+
+@router.post("/agent/analyze-missed")
+@router.post("/api/agent/analyze-missed")
+async def analyze_missed_endpoint(payload: AnalyzeMissedRequest) -> Dict[str, Any]:
+    """
+    Isolated Missed Opportunity Analysis Endpoint.
+    Analyzes missed deadlines / intake windows and provides strategic diagnostic recommendations.
+    Does NOT interfere with matching logic.
+    """
+    try:
+        profile_dict = {}
+        if payload.profile:
+            profile_dict = {
+                "name": payload.profile.get_effective_name(),
+                "education": payload.profile.get_effective_education(),
+                "skills": payload.profile.get_effective_skills(),
+            }
+        log_agent_step("analyze_missed_request", f"{len(payload.missedOpportunities)} missed items")
+        result = missed_analysis_engine.analyze_missed_opportunities(
+            user_profile=profile_dict,
+            missed_opportunities=payload.missedOpportunities,
+        )
+        return result
+    except Exception as e:
+        log_error("route_analyze_missed", e)
+        raise HTTPException(status_code=500, detail=f"Missed analysis failed: {str(e)}")
+
+
+# ── POST /agent/feedback (Non-Intrusive Feedback Loop) ────────────────────────
+
+@router.post("/agent/feedback")
+@router.post("/api/agent/feedback")
+async def record_feedback_endpoint(payload: UserFeedbackRequest) -> Dict[str, Any]:
+    """
+    Non-intrusive User Feedback & Behavior Endpoint.
+    Persists user feedback (save, dismiss, apply, thumbs_up) to Firestore collection `user_feedback`.
+    """
+    try:
+        log_agent_step("record_feedback_request", f"user='{payload.userId}' action='{payload.action}' opp='{payload.opportunityId}'")
+        result = feedback_service.record_feedback(
+            user_id=payload.userId,
+            opportunity_id=payload.opportunityId,
+            action=payload.action,
+            opportunity_type=payload.opportunityType,
+            feedback_text=payload.feedbackText,
+        )
+        return result
+    except Exception as e:
+        log_error("route_record_feedback", e)
+        raise HTTPException(status_code=500, detail=f"Recording feedback failed: {str(e)}")
+

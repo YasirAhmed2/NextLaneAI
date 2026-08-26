@@ -144,3 +144,25 @@ class AgentExecutionResponse(BaseModel):
     matched_count: int = 0
     duration_ms: int = 0
     timestamp: str = ""
+
+
+# ── New Additive Agent Schemas ───────────────────────────────────────────────
+
+class GoalDrivenAgentRequest(BaseModel):
+    profile: Optional[UserProfileRequest] = None
+    goal: str = Field(..., description="Explicit career or academic strategic goal")
+    forceRescrape: Optional[bool] = False
+
+
+class AnalyzeMissedRequest(BaseModel):
+    profile: Optional[UserProfileRequest] = None
+    missedOpportunities: List[Dict[str, Any]] = Field(default_factory=list)
+
+
+class UserFeedbackRequest(BaseModel):
+    userId: str
+    opportunityId: str
+    action: str = Field(..., description="'save' | 'dismiss' | 'apply' | 'thumbs_up' | 'thumbs_down'")
+    opportunityType: Optional[str] = None
+    feedbackText: Optional[str] = None
+
