@@ -368,11 +368,40 @@ app.post("/api/auth/register", async (req, res) => {
       return res.status(409).json({ error: "This username is already taken. Please choose another." });
     }
 
+    // Strict unique email check — only one account can be created with one email
     if (users.has(normalizedEmail)) {
-      const existing = users.get(normalizedEmail)!;
-      if (existing.isVerified) {
-        return res.status(409).json({ error: "An account with this email already exists. Please log in." });
-      }
+      return res.status(409).json({ error: "An account with this email address already exists. Please log in instead." });
+    }
+
+    // Password strength rules validation
+    if (password.length < 8) {
+      return res.status(400).json({ error: "Password must be at least 8 characters long." });
+    }
+
+    const hasLower = /[a-z]/.test(password);
+    const hasUpper = /[A-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecial = /[^A-Za-z0-9]/.test(password);
+
+    if (!hasLower || !hasUpper || !hasNumber || !hasSpecial) {
+      return res.status(400).json({
+        error: "Password must contain a mixture of lowercase letters, uppercase letters, numbers, and special symbols (e.g. @$!%*#?&)."
+      });
+    }
+
+    // Check for sequential counting (e.g. 12345678, 012345, 98765432)
+    const sequentialPatterns = ["12345", "23456", "34567", "45678", "56789", "01234", "98765", "87654", "76543", "65432", "54321"];
+    if (sequentialPatterns.some(seq => password.includes(seq))) {
+      return res.status(400).json({ error: "Password cannot contain simple sequential numbers (e.g. 12345678)." });
+    }
+
+    // Check if password contains username or email
+    const emailPrefix = normalizedEmail.split("@")[0];
+    if (
+      (trimmedUsername.length >= 3 && password.toLowerCase().includes(trimmedUsername.toLowerCase())) ||
+      (emailPrefix.length >= 3 && password.toLowerCase().includes(emailPrefix.toLowerCase()))
+    ) {
+      return res.status(400).json({ error: "Password cannot contain your username or email address." });
     }
 
     const salt = generateSalt();

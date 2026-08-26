@@ -522,7 +522,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="At least 6 characters"
+                  placeholder="Min 8 chars (upper, lower, num, symbol)"
                   required
                   className="w-full bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl py-2.5 pl-10 pr-10 text-xs sm:text-sm text-[var(--text)] focus:outline-none focus:border-[#D4AF37] transition-colors"
                 />
@@ -537,6 +537,56 @@ export const AuthView: React.FC<AuthViewProps> = ({
                   </span>
                 </button>
               </div>
+
+              {/* Dynamic Password Strength Indicator Bar */}
+              {password.length > 0 && (() => {
+                const lenOk = password.length >= 8;
+                const lowerOk = /[a-z]/.test(password);
+                const upperOk = /[A-Z]/.test(password);
+                const numOk = /[0-9]/.test(password);
+                const symOk = /[^A-Za-z0-9]/.test(password);
+                const noSeqOk = !["12345", "23456", "34567", "45678", "56789", "01234", "98765", "87654", "76543", "65432"].some(s => password.includes(s));
+                const noUserOk = !username || !password.toLowerCase().includes(username.toLowerCase());
+
+                const score = [lenOk, (lowerOk && upperOk), numOk, symOk, (noSeqOk && noUserOk)].filter(Boolean).length;
+                const pct = (score / 5) * 100;
+                
+                let colorClass = "bg-red-500";
+                let label = "Weak Password";
+                if (score >= 4) {
+                  colorClass = "bg-emerald-500";
+                  label = "Strong & Secure Password";
+                } else if (score >= 2) {
+                  colorClass = "bg-amber-500";
+                  label = "Moderate Password";
+                }
+
+                return (
+                  <div className="mt-2 space-y-1.5 animate-in fade-in duration-150">
+                    <div className="flex justify-between items-center text-[10px]">
+                      <span className="font-semibold text-[var(--text-secondary)]">Strength: <strong className={score >= 4 ? "text-emerald-500" : score >= 2 ? "text-amber-500" : "text-red-500"}>{label}</strong></span>
+                      <span className="font-mono text-[var(--text-muted)]">{pct}%</span>
+                    </div>
+                    <div className="w-full bg-[var(--bg-subtle)] border border-[var(--border)] rounded-full h-1.5 overflow-hidden">
+                      <div className={`h-full ${colorClass} transition-all duration-300 rounded-full`} style={{ width: `${pct}%` }}></div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-1 text-[10px] text-[var(--text-muted)] mt-1">
+                      <span className={`flex items-center gap-1 ${lenOk ? 'text-emerald-400' : ''}`}>
+                        <span className="material-symbols-outlined text-[12px]">{lenOk ? 'check_circle' : 'cancel'}</span> 8+ characters
+                      </span>
+                      <span className={`flex items-center gap-1 ${lowerOk && upperOk ? 'text-emerald-400' : ''}`}>
+                        <span className="material-symbols-outlined text-[12px]">{lowerOk && upperOk ? 'check_circle' : 'cancel'}</span> A-Z & a-z letters
+                      </span>
+                      <span className={`flex items-center gap-1 ${numOk && symOk ? 'text-emerald-400' : ''}`}>
+                        <span className="material-symbols-outlined text-[12px]">{numOk && symOk ? 'check_circle' : 'cancel'}</span> Number & @$!%*# symbol
+                      </span>
+                      <span className={`flex items-center gap-1 ${noSeqOk && noUserOk ? 'text-emerald-400' : ''}`}>
+                        <span className="material-symbols-outlined text-[12px]">{noSeqOk && noUserOk ? 'check_circle' : 'cancel'}</span> No sequential counting/name
+                      </span>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
 
             <div>
@@ -570,7 +620,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
 
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || password.length < 8}
               className="w-full btn-primary py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-[#1C1C1C] flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-[#D4AF37]/20 disabled:opacity-50 mt-2"
             >
               {isLoading ? (
