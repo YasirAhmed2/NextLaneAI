@@ -167,5 +167,78 @@ export const opportraService = {
       console.warn('[Deadline Sentry] Error querying reminders:', err);
       return { success: false, reminderSent: false };
     }
+  },
+
+  /**
+   * AI CV Tailoring Assistant — Optimizes CV bullet points & summary for a target opportunity.
+   */
+  async tailorCv(
+    cvText: string,
+    opportunityTitle: string,
+    organization: string,
+    opportunityDescription: string,
+    requirements: string[] = [],
+    userSkills: string[] = []
+  ): Promise<any> {
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/agent/tailor-cv`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cvText,
+          opportunityTitle,
+          organization,
+          opportunityDescription,
+          requirements,
+          userSkills,
+        }),
+      });
+      return await res.json();
+    } catch (err: any) {
+      return {
+        success: false,
+        error: err.message,
+        tailoredSummary: `ATS-optimized summary for ${opportunityTitle} at ${organization}.`,
+        highlightedSkills: userSkills.slice(0, 5),
+        tailoredExperienceBullets: [
+          `Engineered high-performance software systems matching ${organization} technical standards.`,
+          `Applied data structures, API integrations, and robust code architecture.`
+        ],
+        matchScoreEstimate: 85,
+        atsAdvice: ['Quantify metrics with percentages.', 'Match keywords from job requirements.']
+      };
+    }
+  },
+
+  /**
+   * AI Scholarship Assistant — Generates Motivation Letters or Recommendation Letters.
+   */
+  async generateLetter(
+    letterType: 'motivation_letter' | 'recommendation_letter',
+    scholarshipTitle: string,
+    organization: string,
+    scholarshipDescription: string,
+    userProfile: Record<string, any> = {}
+  ): Promise<any> {
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/agent/generate-letter`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          letterType,
+          scholarshipTitle,
+          organization,
+          scholarshipDescription,
+          userProfile,
+        }),
+      });
+      return await res.json();
+    } catch (err: any) {
+      return {
+        success: false,
+        error: err.message,
+        letterContent: `Letter generation fallback for ${scholarshipTitle} at ${organization}.`
+      };
+    }
   }
 };

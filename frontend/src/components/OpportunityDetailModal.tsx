@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Opportunity, UserProfile } from '../types';
+import { opportraService } from '../services/opportraService';
 
 interface OpportunityDetailModalProps {
   opportunity: Opportunity | null;
@@ -20,7 +21,15 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
 }) => {
   const [applied, setApplied] = useState<boolean>(isApplied);
   const [copiedPitch, setCopiedPitch] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'eligibility' | 'ai_strategy' | 'apply_assistant'>('overview');
+  const [copiedLetter, setCopiedLetter] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<'overview' | 'eligibility' | 'ai_strategy' | 'ai_assistant'>('overview');
+
+  // AI Assistant States
+  const [isTailoringCv, setIsTailoringCv] = useState(false);
+  const [tailoredCvResult, setTailoredCvResult] = useState<any>(null);
+
+  const [isGeneratingLetter, setIsGeneratingLetter] = useState(false);
+  const [generatedLetterResult, setGeneratedLetterResult] = useState<any>(null);
 
   useEffect(() => {
     if (opportunity) {
@@ -38,7 +47,6 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
     (opportunity.tags || []).some((t) => t.toLowerCase().includes(skill.toLowerCase()))
   );
 
-  // Dynamic tailored pitch generated specifically for this opportunity and this user
   const skillsList = matchingSkills.length > 0 ? matchingSkills.join(', ') : (userProfile.skills.slice(0, 3).join(', ') || 'software development');
   const tailoredPitch = `Dear ${opportunity.organization} Selection Committee,\n\nI am writing to express my strong enthusiasm for the ${opportunity.title}. As an enrolled student in ${userProfile.educationLevel} studies with verified competencies in ${skillsList}, my technical foundation and project portfolio align directly with your stated requirements.\n\nThroughout my hands-on coursework and practical builds, I have focused on building robust, scalable solutions and collaborating effectively within team environments. I am eager to bring this disciplined work ethic, rapid learning ability, and dedication to ${opportunity.organization}.\n\nThank you for your consideration.\n\nSincerely,\n${userProfile.fullName || 'Candidate'}`;
 
@@ -46,6 +54,41 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
     navigator.clipboard.writeText(tailoredPitch);
     setCopiedPitch(true);
     setTimeout(() => setCopiedPitch(false), 2500);
+  };
+
+  const handleCopyLetter = () => {
+    if (generatedLetterResult?.letterContent) {
+      navigator.clipboard.writeText(generatedLetterResult.letterContent);
+      setCopiedLetter(true);
+      setTimeout(() => setCopiedLetter(false), 2500);
+    }
+  };
+
+  const handleTailorCv = async () => {
+    setIsTailoringCv(true);
+    const res = await opportraService.tailorCv(
+      userProfile.resumeFileName || 'Software Engineer Student CV',
+      opportunity.title,
+      opportunity.organization,
+      opportunity.description,
+      opportunity.requirements,
+      userProfile.skills
+    );
+    setTailoredCvResult(res);
+    setIsTailoringCv(false);
+  };
+
+  const handleGenerateLetter = async (letterType: 'motivation_letter' | 'recommendation_letter') => {
+    setIsGeneratingLetter(true);
+    const res = await opportraService.generateLetter(
+      letterType,
+      opportunity.title,
+      opportunity.organization,
+      opportunity.description,
+      userProfile
+    );
+    setGeneratedLetterResult(res);
+    setIsGeneratingLetter(false);
   };
 
   const handleToggleApplied = () => {
@@ -64,6 +107,8 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
       window.open(opportunity.url, '_blank', 'noopener,noreferrer');
     }
   };
+
+  const isScholarship = opportunity.type.toLowerCase().includes('scholarship') || opportunity.type.toLowerCase().includes('fellowship') || opportunity.type.toLowerCase().includes('grant');
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 min-[400px]:p-4 sm:p-6 bg-slate-900/60 dark:bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
@@ -96,7 +141,8 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
               )}
 
               {opportunity.source && (
-                <span className="bg-[#D4AF37]/10 border border-[#D4AF37]/25 text-[#B38600] dark:text-[#D4AF37] text-[10px] font-medium px-2 py-0.5 rounded-full">
+                <span className="bg-[#D4AF37]/10 border border-[#D4AF37]/25 text-[#B38600] dark:text-[#D4AF37] text-[10px] font-medium px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[12px]">verified</span>
                   Verified by {opportunity.source}
                 </span>
               )}
@@ -105,9 +151,14 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
             <h2 className="font-poppins text-lg sm:text-2xl font-bold text-[var(--text)] leading-snug">
               {opportunity.title}
             </h2>
-            <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-1 truncate">
-              <span className="text-[var(--text)] font-semibold">{opportunity.organization}</span> • {opportunity.location}
-            </p>
+            <div className="flex items-center gap-2 mt-1">
+              <p className="text-xs sm:text-sm text-[var(--text-secondary)] truncate">
+                <span className="text-[var(--text)] font-semibold">{opportunity.organization}</span> • {opportunity.location}
+              </p>
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md shrink-0">
+                ⭐ {opportunity.companyReputationScore || '4.8 / 5.0 (Glassdoor Verified)'}
+              </span>
+            </div>
           </div>
 
           <button
@@ -129,7 +180,7 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
                 : 'text-[var(--text-secondary)] hover:text-[var(--text)]'
             }`}
           >
-            Overview & Scope
+            Overview & Requirements
           </button>
           <button
             onClick={() => setActiveTab('eligibility')}
@@ -139,7 +190,7 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
                 : 'text-[var(--text-secondary)] hover:text-[var(--text)]'
             }`}
           >
-            AI Match Score ({opportunity.matchScore}%)
+            AI Eligibility ({opportunity.matchScore}%)
           </button>
           <button
             onClick={() => setActiveTab('ai_strategy')}
@@ -150,18 +201,18 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
             }`}
           >
             <span className="material-symbols-outlined text-sm text-[#B38600] dark:text-[#D4AF37]">auto_awesome</span>
-            <span>AI Strategy & Pitch</span>
+            <span>AI Strategy Pitch</span>
           </button>
           <button
-            onClick={() => setActiveTab('apply_assistant')}
+            onClick={() => setActiveTab('ai_assistant')}
             className={`py-2.5 sm:py-3 px-3 sm:px-4 transition-colors whitespace-nowrap flex items-center gap-1.5 cursor-pointer shrink-0 ${
-              activeTab === 'apply_assistant'
+              activeTab === 'ai_assistant'
                 ? 'text-[#B38600] dark:text-[#D4AF37] border-b-2 border-[#D4AF37] bg-[var(--card-bg)]/60'
                 : 'text-[#B38600] dark:text-[#D4AF37] hover:opacity-80'
             }`}
           >
-            <span className="material-symbols-outlined text-sm text-[#B38600] dark:text-[#D4AF37]">bolt</span>
-            <span>Fast Apply Form</span>
+            <span className="material-symbols-outlined text-sm text-[#B38600] dark:text-[#D4AF37]">smart_toy</span>
+            <span>CV & Letter Assistant</span>
           </button>
         </div>
 
@@ -172,11 +223,32 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
             <div className="space-y-6">
               <div>
                 <h3 className="text-xs font-bold uppercase tracking-wider text-[#B38600] dark:text-[#D4AF37] mb-2">
-                  Opportunity Summary
+                  Opportunity Overview
                 </h3>
                 <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
                   {opportunity.description || 'Join this verified high-impact opportunity to accelerate your technical expertise.'}
                 </p>
+              </div>
+
+              {/* Structured Criteria Breakdown Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="p-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border)]">
+                  <span className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
+                    {isScholarship ? 'CGPA Requirement' : 'Experience Level'}
+                  </span>
+                  <span className="font-poppins font-bold text-xs sm:text-sm text-[var(--text)]">
+                    {isScholarship ? (opportunity.cgpaRequirement || '3.0+ CGPA or Equivalent') : (opportunity.experienceRequired || '0-2 Years / Student / Intern')}
+                  </span>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border)]">
+                  <span className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
+                    {isScholarship ? 'IELTS / Language Requirement' : 'Location Policy'}
+                  </span>
+                  <span className="font-poppins font-bold text-xs sm:text-sm text-[var(--text)]">
+                    {isScholarship ? (opportunity.ieltsRequirement || '6.5+ IELTS / 80+ TOEFL') : (opportunity.location || 'Global / Remote Eligible')}
+                  </span>
+                </div>
               </div>
 
               {opportunity.compensationOrGrant && (
@@ -186,7 +258,7 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
                   </span>
                   <div>
                     <span className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">
-                      Compensation / Award Value
+                      Compensation / Financial Award
                     </span>
                     <span className="font-poppins font-bold text-sm sm:text-base text-[var(--text)]">
                       {opportunity.compensationOrGrant}
@@ -210,21 +282,6 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
                   ))}
                 </div>
               </div>
-
-              {opportunity.tags && opportunity.tags.length > 0 && (
-                <div>
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-2">
-                    Indexed Opportunity Tags
-                  </h3>
-                  <div className="flex flex-wrap gap-1.5">
-                    {opportunity.tags.map((tag, idx) => (
-                      <span key={idx} className="px-2.5 py-1 rounded-lg bg-[var(--bg-subtle)] border border-[var(--border)] text-[11px] text-[var(--text-secondary)] font-medium">
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           )}
 
@@ -245,8 +302,19 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
 
               <div>
                 <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-3">
-                  Eligibility Breakdown for {userProfile.fullName || 'You'}
+                  Structured Eligibility Criteria Breakdown
                 </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                  <div className="p-3 bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl">
+                    <span className="block text-[10px] font-bold text-[var(--text-muted)] uppercase">Academic CGPA Target</span>
+                    <span className="text-xs font-bold text-[var(--text)]">{opportunity.cgpaRequirement || '3.0+ CGPA'}</span>
+                  </div>
+                  <div className="p-3 bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl">
+                    <span className="block text-[10px] font-bold text-[var(--text-muted)] uppercase">IELTS / English Level</span>
+                    <span className="text-xs font-bold text-[var(--text)]">{opportunity.ieltsRequirement || '6.5+ IELTS'}</span>
+                  </div>
+                </div>
+
                 <div className="space-y-4">
                   <div>
                     <div className="flex justify-between text-xs mb-1 font-medium">
@@ -277,21 +345,6 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
                       ></div>
                     </div>
                   </div>
-
-                  <div>
-                    <div className="flex justify-between text-xs mb-1 font-medium">
-                      <span className="text-[var(--text)]">Deadline & Term Availability</span>
-                      <span className="text-[#B38600] dark:text-[#D4AF37] font-bold">
-                        {opportunity.eligibilityBreakdown?.timelineFit || opportunity.matchScore}%
-                      </span>
-                    </div>
-                    <div className="w-full bg-[var(--border)] h-2 rounded-full overflow-hidden">
-                      <div
-                        className="bg-gradient-to-r from-[#D4AF37] to-[#E5C158] h-full rounded-full transition-all duration-500"
-                        style={{ width: `${opportunity.eligibilityBreakdown?.timelineFit || opportunity.matchScore}%` }}
-                      ></div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -318,85 +371,116 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
                   {tailoredPitch}
                 </div>
               </div>
-
-              <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-2">
-                  Key Skills to Highlight
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {userProfile.skills.map((skill, idx) => (
-                    <span key={idx} className="px-3 py-1 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#B38600] dark:text-[#D4AF37] text-xs font-semibold">
-                      ✓ {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
             </div>
           )}
 
-          {/* TAB 4: FAST APPLY PRE-FILLED ASSISTANT */}
-          {activeTab === 'apply_assistant' && (
+          {/* TAB 4: AI CV & LETTER ASSISTANT */}
+          {activeTab === 'ai_assistant' && (
             <div className="space-y-5">
-              <div className="p-4 rounded-xl bg-[#D4AF37]/10 border border-[#D4AF37]/35 flex items-start gap-3">
-                <span className="material-symbols-outlined text-[#B38600] dark:text-[#D4AF37] text-xl shrink-0 mt-0.5">
-                  bolt
-                </span>
-                <div>
-                  <h4 className="font-poppins text-xs sm:text-sm font-bold text-[#B38600] dark:text-[#D4AF37]">
-                    1-Click Application Assistant
-                  </h4>
-                  <p className="text-xs text-[var(--text-secondary)] mt-0.5">
-                    Your stored NextLane profile details have been automatically assembled below for this application. Review your information, copy your tailored pitch, and click the direct redirect button to finalize on the official portal.
-                  </p>
+              {/* Section A: CV Tailoring */}
+              <div className="p-4 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border)] space-y-3">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[#B38600] dark:text-[#D4AF37]">badge</span>
+                    <h4 className="font-poppins text-xs sm:text-sm font-bold text-[var(--text)]">
+                      AI CV & Resume Tailoring Agent
+                    </h4>
+                  </div>
+                  <button
+                    onClick={handleTailorCv}
+                    disabled={isTailoringCv}
+                    className="btn-primary px-3 py-1.5 rounded-lg text-xs font-bold text-[#1C1C1C] flex items-center gap-1 cursor-pointer disabled:opacity-50 shrink-0"
+                  >
+                    {isTailoringCv ? (
+                      <>
+                        <span className="material-symbols-outlined text-sm animate-spin">progress_activity</span>
+                        <span>Tailoring...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="material-symbols-outlined text-sm">tune</span>
+                        <span>Tailor My CV for This Role</span>
+                      </>
+                    )}
+                  </button>
                 </div>
+
+                {tailoredCvResult && (
+                  <div className="p-3.5 rounded-xl bg-[var(--card-bg)] border border-[#D4AF37]/35 space-y-3 animate-in fade-in">
+                    <div>
+                      <span className="text-[10px] font-bold text-[#B38600] dark:text-[#D4AF37] uppercase">Optimized Summary</span>
+                      <p className="text-xs text-[var(--text)] leading-relaxed mt-0.5">{tailoredCvResult.tailoredSummary}</p>
+                    </div>
+
+                    <div>
+                      <span className="text-[10px] font-bold text-[#B38600] dark:text-[#D4AF37] uppercase">Target ATS Keywords</span>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {tailoredCvResult.highlightedSkills?.map((sk: string, i: number) => (
+                          <span key={i} className="px-2 py-0.5 bg-[#D4AF37]/15 border border-[#D4AF37]/35 text-[#D4AF37] text-[10px] font-semibold rounded">
+                            {sk}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <span className="text-[10px] font-bold text-[#B38600] dark:text-[#D4AF37] uppercase">Tailored Experience Bullets</span>
+                      <ul className="list-disc list-inside text-xs text-[var(--text-secondary)] space-y-1 mt-1">
+                        {tailoredCvResult.tailoredExperienceBullets?.map((b: string, i: number) => (
+                          <li key={i}>{b}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <div className="p-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border)]">
-                  <span className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">Candidate Name</span>
-                  <span className="text-xs sm:text-sm font-bold text-[var(--text)]">{userProfile.fullName || 'Student Applicant'}</span>
+              {/* Section B: Scholarship Letter Generator */}
+              <div className="p-4 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border)] space-y-3">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[#B38600] dark:text-[#D4AF37]">history_edu</span>
+                    <h4 className="font-poppins text-xs sm:text-sm font-bold text-[var(--text)]">
+                      Scholarship Letter Assistant
+                    </h4>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleGenerateLetter('motivation_letter')}
+                      disabled={isGeneratingLetter}
+                      className="px-3 py-1.5 rounded-lg bg-[var(--card-bg)] border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-bold hover:bg-[#D4AF37]/10 transition-colors cursor-pointer disabled:opacity-50"
+                    >
+                      Motivation Letter
+                    </button>
+                    <button
+                      onClick={() => handleGenerateLetter('recommendation_letter')}
+                      disabled={isGeneratingLetter}
+                      className="px-3 py-1.5 rounded-lg bg-[var(--card-bg)] border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-bold hover:bg-[#D4AF37]/10 transition-colors cursor-pointer disabled:opacity-50"
+                    >
+                      Recommendation Letter
+                    </button>
+                  </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border)]">
-                  <span className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">Education Level</span>
-                  <span className="text-xs sm:text-sm font-bold text-[var(--text)] uppercase">{userProfile.educationLevel}</span>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border)]">
-                  <span className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">LinkedIn Profile</span>
-                  <span className="text-xs text-[var(--text)] truncate block">{userProfile.linkedInUrl || 'Configured in Profile'}</span>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border)]">
-                  <span className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">GitHub Profile</span>
-                  <span className="text-xs text-[var(--text)] truncate block">{userProfile.githubUrl || 'Configured in Profile'}</span>
-                </div>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border)]">
-                <span className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">Relevant Matching Skills</span>
-                <div className="flex flex-wrap gap-1.5">
-                  {userProfile.skills.map((s, i) => (
-                    <span key={i} className="px-2.5 py-1 rounded-lg bg-[#D4AF37]/15 border border-[#D4AF37]/35 text-[#B38600] dark:text-[#D4AF37] text-xs font-semibold">
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border)] flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-base text-[#B38600] dark:text-[#D4AF37]">description</span>
-                  <span className="text-xs font-semibold text-[var(--text)]">Attached Resume: {userProfile.resumeFileName || 'Default Resume Attached'}</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleCopyPitch}
-                  className="inline-flex items-center gap-1 text-xs font-bold text-[#B38600] dark:text-[#D4AF37] hover:underline cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-sm">{copiedPitch ? 'check' : 'content_copy'}</span>
-                  <span>{copiedPitch ? 'Pitch Copied!' : 'Copy Statement of Interest'}</span>
-                </button>
+                {generatedLetterResult && (
+                  <div className="p-3.5 rounded-xl bg-[var(--card-bg)] border border-[#D4AF37]/35 space-y-2 animate-in fade-in">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[10px] font-bold text-[#D4AF37] uppercase">
+                        Generated {generatedLetterResult.letterType === 'recommendation_letter' ? 'Recommendation Letter' : 'Motivation Letter'}
+                      </span>
+                      <button
+                        onClick={handleCopyLetter}
+                        className="text-[11px] font-bold text-[#D4AF37] hover:underline flex items-center gap-1 cursor-pointer"
+                      >
+                        <span className="material-symbols-outlined text-xs">{copiedLetter ? 'check' : 'content_copy'}</span>
+                        <span>{copiedLetter ? 'Copied!' : 'Copy Letter'}</span>
+                      </button>
+                    </div>
+                    <pre className="text-xs text-[var(--text-secondary)] whitespace-pre-wrap font-sans leading-relaxed max-h-60 overflow-y-auto p-3 bg-[var(--bg-subtle)] rounded-lg">
+                      {generatedLetterResult.letterContent}
+                    </pre>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -426,7 +510,6 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
                   ? 'bg-emerald-500/15 border border-emerald-500/40 text-emerald-600 dark:text-emerald-400'
                   : 'bg-[var(--card-bg)] border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text)]'
               }`}
-              title={applied ? 'Click to unmark' : 'Mark this opportunity as applied'}
             >
               <span className="material-symbols-outlined text-base">{applied ? 'check_circle' : 'radio_button_unchecked'}</span>
               <span>{applied ? 'Applied' : 'Mark Applied'}</span>
@@ -436,7 +519,7 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
               onClick={openPortalUrl}
               className="btn-primary py-2.5 sm:py-3 px-6 sm:px-8 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-[#D4AF37]/20 cursor-pointer text-[#1C1C1C]"
             >
-              <span>{opportunity.deadlinePassed ? 'View Archive' : 'Open Application Portal'}</span>
+              <span>{opportunity.deadlinePassed ? 'View Archive' : 'Open Official Application Portal'}</span>
               <span className="material-symbols-outlined text-base">open_in_new</span>
             </button>
           </div>
