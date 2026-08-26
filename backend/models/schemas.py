@@ -10,6 +10,11 @@ class EligibilityBreakdown(BaseModel):
     skillMatch: int = 85
     academicAlignment: int = 85
     timelineFit: int = 85
+    cgpaRequirement: str = "3.0+ CGPA or Equivalent"
+    ieltsRequirement: str = "6.5+ IELTS / 80+ TOEFL or English Medium Cert"
+    degreeLevel: str = "Undergraduate / Graduate"
+    experienceRequired: str = "0-2 Years / Entry Level"
+    locationRequirement: str = "Global / Remote Eligible"
     insights: List[str] = Field(default_factory=list)
 
 
@@ -24,6 +29,7 @@ class OpportunitySchema(BaseModel):
     deadline: str = "Upcoming"
     deadlineDate: Optional[str] = None
     deadlinePassed: bool = False
+    urgent24h: bool = False
     source: Optional[str] = "NextLane AI Aggregator"
     tags: List[str] = Field(default_factory=list)
     aiMatchReason: str = "Matches your current technical competencies and learning roadmap."
@@ -33,6 +39,12 @@ class OpportunitySchema(BaseModel):
     compensationOrGrant: Optional[str] = None
     url: Optional[str] = None
     isSaved: bool = False
+    isVerifiedListing: bool = True
+    companyReputationScore: str = "4.8 / 5.0 (Verified Rating)"
+    isVerifiedCompany: bool = True
+    cgpaRequirement: Optional[str] = "3.0+ CGPA"
+    ieltsRequirement: Optional[str] = "6.5+ IELTS / English Cert"
+    experienceRequired: Optional[str] = "0-1 Years / Student"
     eligibilityBreakdown: Optional[EligibilityBreakdown] = None
 
 
@@ -40,6 +52,7 @@ class UserProfileRequest(BaseModel):
     name: Optional[str] = ""
     fullName: Optional[str] = ""
     email: Optional[str] = ""           # Used for proactive deadline email alerts
+    location: Optional[str] = "Pakistan" # User country / city for location matching
     education: Optional[str] = ""
     educationLevel: Optional[str] = ""
     skills: List[str] = Field(default_factory=list)
@@ -48,15 +61,15 @@ class UserProfileRequest(BaseModel):
     linkedInUrl: Optional[str] = None
     githubUrl: Optional[str] = None
     resumeFileName: Optional[str] = None
+    resumeText: Optional[str] = None    # Raw CV text for tailoring
 
-    @field_validator("name", "fullName", "education", "educationLevel", mode="before")
+    @field_validator("name", "fullName", "location", "education", "educationLevel", mode="before")
     @classmethod
     def sanitize_string(cls, v):
         """Strip and limit string fields to prevent injection."""
         if v is None:
             return ""
         s = str(v).strip()
-        # Remove prompt-injection sequences
         for seq in ["```", "###", "SYSTEM:", "IGNORE PREVIOUS", "<script"]:
             s = s.replace(seq, "")
         return s[:500]
@@ -80,6 +93,9 @@ class UserProfileRequest(BaseModel):
     def get_effective_education(self) -> str:
         return (self.educationLevel or self.education or "Undergraduate").strip()
 
+    def get_effective_location(self) -> str:
+        return (self.location or "Pakistan").strip()
+
     def get_effective_skills(self) -> List[str]:
         sanitized = [s.strip() for s in self.skills if s and isinstance(s, str)]
         return sanitized[:15]
@@ -87,6 +103,25 @@ class UserProfileRequest(BaseModel):
     def get_effective_interests(self) -> List[str]:
         raw = self.targetObjectives or self.interests or []
         return [i.strip() for i in raw if i and isinstance(i, str)]
+
+
+# ── Assistant Request Schemas ──────────────────────────────────────────────────
+
+class TailorCvRequest(BaseModel):
+    cvText: str = Field(..., description="User's original CV text or resume summary")
+    opportunityTitle: str
+    organization: str
+    opportunityDescription: str
+    requirements: List[str] = Field(default_factory=list)
+    userSkills: List[str] = Field(default_factory=list)
+
+
+class LetterGeneratorRequest(BaseModel):
+    letterType: str = Field(..., description="'motivation_letter' or 'recommendation_letter'")
+    scholarshipTitle: str
+    organization: str
+    scholarshipDescription: str
+    userProfile: Dict[str, Any] = Field(default_factory=dict)
 
 
 # ── Agent Response Schemas ────────────────────────────────────────────────────
@@ -109,15 +144,3 @@ class AgentExecutionResponse(BaseModel):
     matched_count: int = 0
     duration_ms: int = 0
     timestamp: str = ""
-
-    # NOTE: matched_results is intentionally excluded from this schema
-    # to avoid huge response payloads in status checks.
-    # Use the /match-all endpoint for full results.
-
-
-class AgentRunResponse(BaseModel):
-    """Legacy schema kept for backward compatibility."""
-    status: str
-    timestamp: str
-    opportunitiesCount: int
-    sources: List[str]
