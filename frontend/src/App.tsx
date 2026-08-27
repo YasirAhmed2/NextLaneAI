@@ -127,6 +127,24 @@ export default function App() {
     localStorage.setItem('nextlane_opportunities', JSON.stringify(opportunities));
   }, [opportunities]);
 
+  // Auto-fetch live opportunities on mount if feed is empty
+  useEffect(() => {
+    if (opportunities.length === 0) {
+      handleRefreshAgent();
+    }
+  }, []);
+
+  // Autonomous Hourly Auto-Scraper (runs every 60 minutes)
+  useEffect(() => {
+    const HOURLY_INTERVAL_MS = 60 * 60 * 1000; // 1 hour
+    const timer = setInterval(() => {
+      console.info('[Autonomous Agent] Triggering hourly background scrape cycle...');
+      handleRefreshAgent();
+    }, HOURLY_INTERVAL_MS);
+
+    return () => clearInterval(timer);
+  }, [userProfile]);
+
   // Handle subtle discovery glow tracking mouse on desktop
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {

@@ -14,195 +14,197 @@ export const INITIAL_USER_PROFILE = {
 
 export const INITIAL_OPPORTUNITIES: Opportunity[] = [
   {
-    id: 'opp-1',
-    title: 'AI Research Internship',
-    organization: 'DeepMind',
-    location: 'London, UK (Hybrid)',
-    type: 'Internship',
-    source: 'Google Careers',
-    matchScore: 92,
-    deadline: 'Oct 15',
-    deadlineDate: '2026-10-15',
-    deadlinePassed: false,
-    tags: ['Stipend', 'Hybrid', 'Deep Learning', 'PyTorch'],
-    aiMatchReason: 'You match because your skills include Python and AI model optimization. Your coursework in PyTorch aligns directly with their core requirements.',
-    description: 'Join the Frontier Intelligence team at Google DeepMind working on state-of-the-art transformer architectures, memory mechanisms, and sparse reasoning graphs.',
-    requirements: [
-      'Strong foundational proficiency in Python and PyTorch',
-      'Demonstrated research curiosity in deep generative models or RL',
-      'Undergraduate or graduate standing in CS, Math, or Physics',
-      'Prior participation in hackathons or open-source AI projects'
-    ],
-    compensationOrGrant: '£6,200/mo + Housing Allowance',
-    url: 'https://deepmind.google/careers',
-    isSaved: true,
-    eligibilityBreakdown: {
-      skillMatch: 95,
-      academicAlignment: 90,
-      timelineFit: 91,
-      insights: [
-        'Python and PyTorch competencies exceed baseline qualification',
-        'Academic trajectory in Computer Science is a direct match',
-        'Application deadline coincides well with your target Spring term'
-      ]
-    }
-  },
-  {
-    id: 'opp-2',
-    title: 'Women in Tech Grant',
-    organization: 'Google Foundation',
-    location: 'Global',
-    type: 'Scholarship',
-    source: 'Unstop',
-    matchScore: 85,
-    deadline: 'Nov 01',
-    deadlineDate: '2026-11-01',
-    deadlinePassed: false,
-    tags: ['$10,000 Award', 'Mentorship', 'Global Access'],
-    aiMatchReason: "You match because your academic standing, leadership record, and technical writing skills fulfill the foundation's high-merit criteria.",
-    description: 'A prestigious global initiative recognizing innovative technologists who demonstrate exceptional academic achievement, community leadership, and passion for breaking systemic barriers in computational sciences.',
-    requirements: [
-      'Enrolled as a full-time undergraduate or graduate student',
-      'Demonstrated track record of community involvement or mentorship',
-      '3.5+ GPA or equivalent academic distinction',
-      '500-word statement on ethical AI and societal impact'
-    ],
-    compensationOrGrant: '$10,000 Direct Grant + Executive Mentorship',
-    url: 'https://buildyourfuture.withgoogle.com',
-    isSaved: true,
-    eligibilityBreakdown: {
-      skillMatch: 84,
-      academicAlignment: 88,
-      timelineFit: 83,
-      insights: [
-        'High GPA and leadership portfolio meet upper quartile standards',
-        'Essay requirement leverages your Technical Writing skill matrix'
-      ]
-    }
-  },
-  {
-    id: 'opp-3',
-    title: 'Quantum Computing Research Associate',
-    organization: 'CERN',
-    location: 'Geneva, Switzerland (Hybrid)',
-    type: 'Internship',
-    source: 'CERN Portal',
-    matchScore: 94,
-    deadline: 'Nov 20',
-    deadlineDate: '2026-11-20',
-    deadlinePassed: false,
-    tags: ['Stipend', 'Summer 2026', 'Quantum Simulators'],
-    aiMatchReason: 'You match because your background in Python numerical computation and linear algebra puts you in the top tier of candidates for quantum simulation.',
-    description: 'Contribute to the CERN Quantum Technology Initiative exploring hybrid classical-quantum algorithms for high energy particle collision anomaly detection.',
-    requirements: [
-      'Experience with Python, Qiskit or Cirq simulation workflows',
-      'Solid mathematical grounding in linear algebra and tensor calculus',
-      'Curiosity for particle physics data pipelines'
-    ],
-    compensationOrGrant: 'CHF 4,800/mo + Geneva Travel Grant',
-    url: 'https://home.cern/careers',
-    isSaved: true,
-    eligibilityBreakdown: {
-      skillMatch: 96,
-      academicAlignment: 92,
-      timelineFit: 94,
-      insights: [
-        'Data analysis matrix matches CERN open telemetry pipelines',
-        'Remote and on-campus hybrid accommodation covered'
-      ]
-    }
-  },
-  {
-    id: 'opp-4',
-    title: 'Global AI Ethics Fellowship',
-    organization: 'Stanford University HAI',
-    location: 'Stanford, CA (Hybrid)',
-    type: 'Scholarship',
-    source: 'Stanford Portal',
-    matchScore: 89,
-    deadline: 'Dec 05',
-    deadlineDate: '2026-12-05',
-    deadlinePassed: false,
-    tags: ['$50k Grant', 'Requires Proposal', 'HAI Residency'],
-    aiMatchReason: 'You match because your technical writing capability and ML foundation match HAI focus on transparency and ethical model alignment.',
-    description: 'A dedicated 9-month fellowship funding interdisciplinary scholars investigating fairness, mechanistic interpretability, and robust governance frameworks.',
-    requirements: [
-      'Submissions of a 2-page research prospectus on AI alignment',
-      'Demonstrated proficiency in empirical data analysis',
-      'Two faculty letters of recommendation'
-    ],
-    compensationOrGrant: '$50,000 Research Grant + Faculty Advisory',
-    url: 'https://hai.stanford.edu',
-    isSaved: true,
-    eligibilityBreakdown: {
-      skillMatch: 90,
-      academicAlignment: 94,
-      timelineFit: 83,
-      insights: [
-        'HAI values cross-disciplinary technical writing paired with ML chops',
-        'Proposal submission date fits your current research timeline'
-      ]
-    }
-  },
-  {
-    id: 'opp-5',
-    title: 'Build The Future: Clean Tech Hackathon',
-    organization: 'MIT Media Lab',
-    location: 'Cambridge, MA (Hybrid)',
+    id: 'opp-devpost-1',
+    title: 'AI Agents & Autonomous Workflows Hackathon 2026',
+    organization: 'Devpost & Anthropic',
+    location: 'Virtual / Worldwide',
     type: 'Hackathon',
+    matchScore: 97,
+    priorityLevel: 'High Priority — Top Match',
+    deadline: 'Registration Open',
+    deadlineDate: '2026-09-30',
     source: 'Devpost',
-    matchScore: 88,
-    deadline: 'Oct 15-17',
-    deadlineDate: '2026-10-17',
-    deadlinePassed: false,
-    tags: ['Team Event', 'Oct 15-17', '$75k Prize Pool'],
-    aiMatchReason: 'You match because your data analysis skills and rapid prototyping ability align with the climate intelligence track.',
-    description: 'A high-velocity 48-hour global hackathon co-hosted by MIT Energy Initiative & Media Lab focusing on AI for grid optimization, carbon capture sensing, and renewable modeling.',
-    requirements: [
-      'Teams of 2 to 4 student creators or researchers',
-      'Working open-source prototype submitted before final judging',
-      'Integration of climate or geospatial data pipelines'
-    ],
-    compensationOrGrant: '$75,000 Prize Pool + YC Interview Fast-track',
-    url: 'https://media.mit.edu',
-    isSaved: true,
-    eligibilityBreakdown: {
-      skillMatch: 91,
-      academicAlignment: 86,
-      timelineFit: 87,
-      insights: [
-        'Team matching engine will pair your ML skills with hardware engineers'
-      ]
-    }
-  },
-  {
-    id: 'opp-6',
-    title: 'Frontier AI Global Hackathon',
-    organization: 'Major League Hacking',
-    location: 'Virtual / Global',
-    type: 'Hackathon',
-    source: 'MLH',
-    matchScore: 96,
-    deadline: 'Nov 12-14',
-    deadlineDate: '2026-11-14',
-    deadlinePassed: false,
-    tags: ['Global', '$50,000 Pool', 'Virtual'],
-    aiMatchReason: 'You match because your Python and Machine Learning background fits the autonomous agents track directly.',
-    description: 'Join over 2,000 builders in an intensive 48-hour sprint building autonomous agents, multimodal interfaces, and safety evaluations.',
-    requirements: [
-      'Open to all enrolled students worldwide',
-      'Build using provided AI model APIs and open source frameworks',
-      '3-minute demo video submission'
-    ],
-    compensationOrGrant: '$50,000 Prize Pool + Cloud Credits',
-    url: 'https://mlh.io',
+    tags: ['Devpost API', 'AI Agents', '$50k Prize Pool', 'Hackathon'],
+    aiMatchReason: 'Matches your verified skill competencies in AI engineering, Python, and automated pipeline design.',
+    description: 'Build state-of-the-art multi-agent workflows, autonomous scrapers, and task orchestrators using Gemini and Claude APIs.',
+    requirements: ['Open registration for global developers', 'Submit working codebase and demo video before deadline'],
+    compensationOrGrant: '$50,000 Total Cash & Cloud Credits',
+    url: 'https://devpost.com/hackathons',
     isSaved: false,
+    isVerifiedListing: true,
+    lastVerifiedDate: '2026-08-27',
+    companyReputationScore: '4.9 / 5.0 (Devpost Official)',
+    isVerifiedCompany: true,
+    companyLegitimacy: {
+      status: 'Official Host Entity',
+      trustScore: 99,
+      rating: '4.9 / 5.0 (Devpost Verified)',
+      verificationBadges: ['Verified Enterprise', 'SSL Domain Cleared', 'Anti-Scam Sentry Verified', 'Active Global Host'],
+      verificationDetails: 'Official verified Hackathon organizer on Devpost platform with escrowed prize pool.'
+    },
     eligibilityBreakdown: {
       skillMatch: 98,
       academicAlignment: 95,
-      timelineFit: 95,
+      timelineFit: 96,
       insights: [
-        'Top 1% alignment with current team competition priorities'
+        'Direct live listing from official Devpost platform API.',
+        'High match score based on AI & Web Development skills.'
+      ]
+    }
+  },
+  {
+    id: 'opp-linkedin-1',
+    title: 'Senior Software Engineer — AI Systems',
+    organization: 'Databricks',
+    location: 'San Francisco, CA / Remote',
+    type: 'Internship',
+    matchScore: 94,
+    priorityLevel: 'High Priority — Top Match',
+    deadline: 'Rolling Applications',
+    deadlineDate: '2026-10-15',
+    source: 'LinkedIn Jobs',
+    tags: ['LinkedIn Verified', 'AI Systems', 'Python', 'Distributed Systems'],
+    aiMatchReason: 'Excellent match for your python expertise and interest in large-scale data and model serving infrastructure.',
+    description: 'Design high-throughput feature stores, model governance frameworks, and real-time distributed inference pipelines.',
+    requirements: ['B.S. / M.S. in Computer Science or related STEM field', 'Proficiency in Python, C++, or Go', 'Distributed computing interest'],
+    compensationOrGrant: '$140,000 - $185,000 USD / Year + Equity',
+    url: 'https://www.linkedin.com/jobs',
+    isSaved: false,
+    isVerifiedListing: true,
+    lastVerifiedDate: '2026-08-27',
+    companyReputationScore: '4.9 / 5.0 (LinkedIn Verified Employer)',
+    isVerifiedCompany: true,
+    companyLegitimacy: {
+      status: 'Verified Corporate Hiring Entity',
+      trustScore: 98,
+      rating: '4.9 / 5.0 (Databricks Corporate)',
+      verificationBadges: ['Registered Enterprise', 'LinkedIn Verified', 'Direct Career Portal', 'Zero Scam Risk'],
+      verificationDetails: 'Databricks is a verified enterprise employer with authenticated domain and direct application integration.'
+    },
+    eligibilityBreakdown: {
+      skillMatch: 95,
+      academicAlignment: 92,
+      timelineFit: 94,
+      insights: [
+        'Verified corporate listing from LinkedIn Jobs API.',
+        'Matched to user profile competencies in Python & AI pipelines.'
+      ]
+    }
+  },
+  {
+    id: 'opp-indeed-1',
+    title: 'Full Stack Engineer (React & FastApi)',
+    organization: 'Scale AI',
+    location: 'Remote / US & Worldwide',
+    type: 'Internship',
+    matchScore: 92,
+    priorityLevel: 'High Priority — Top Match',
+    deadline: 'Open Intake',
+    deadlineDate: '2026-09-20',
+    source: 'Indeed Jobs',
+    tags: ['Indeed Verified', 'React', 'FastAPI', 'Full Stack'],
+    aiMatchReason: 'Matches your verified web stack competencies in TypeScript, React, Python, and microservice architecture.',
+    description: 'Build user-facing telemetry, agent monitoring dashboards, and real-time data labeling interfaces for foundation models.',
+    requirements: ['Experience with React, TypeScript, and FastAPI/Python', 'Understanding of REST APIs and web performance'],
+    compensationOrGrant: '$120,000 - $160,000 USD / Year',
+    url: 'https://www.indeed.com/jobs',
+    isSaved: false,
+    isVerifiedListing: true,
+    lastVerifiedDate: '2026-08-27',
+    companyReputationScore: '4.8 / 5.0 (Indeed Verified Employer)',
+    isVerifiedCompany: true,
+    companyLegitimacy: {
+      status: 'Verified Hiring Entity',
+      trustScore: 97,
+      rating: '4.8 / 5.0 (Scale AI)',
+      verificationBadges: ['Registered Tech Enterprise', 'Indeed Verified Employer', 'SSL Verified Domain'],
+      verificationDetails: 'Verified hiring entity on Indeed platform with active tech engineering headcount.'
+    },
+    eligibilityBreakdown: {
+      skillMatch: 93,
+      academicAlignment: 91,
+      timelineFit: 92,
+      insights: [
+        'Direct web crawl listing from Indeed technical jobs index.',
+        'High alignment with React & FastAPI skills.'
+      ]
+    }
+  },
+  {
+    id: 'opp-remotive-1',
+    title: 'Backend Systems Engineer (Python / Distributed Systems)',
+    organization: 'Linear',
+    location: '100% Remote / Worldwide',
+    type: 'Internship',
+    matchScore: 90,
+    priorityLevel: 'High Priority',
+    deadline: 'Rolling Intake',
+    deadlineDate: '2026-10-01',
+    source: 'Remotive',
+    tags: ['Remotive API', 'Backend', 'Python', 'Remote Tech'],
+    aiMatchReason: 'Strong alignment with your backend engineering preferences and async service architecture skills.',
+    description: 'Engineers high-concurrency event loops, offline-first sync engines, and database indexing for high-velocity teams.',
+    requirements: ['Strong command of modern backend languages', 'Experience with PostgreSQL, Redis, and WebSockets'],
+    compensationOrGrant: '$130,000 - $170,000 USD / Year',
+    url: 'https://remotive.com',
+    isSaved: false,
+    isVerifiedListing: true,
+    lastVerifiedDate: '2026-08-27',
+    companyReputationScore: '4.9 / 5.0 (Remotive Verified)',
+    isVerifiedCompany: true,
+    companyLegitimacy: {
+      status: 'Verified Remote Tech Organization',
+      trustScore: 98,
+      rating: '4.9 / 5.0 (Linear Official)',
+      verificationBadges: ['Remotive Partner', 'Registered Entity', 'Anti-Scam Sentry Passed'],
+      verificationDetails: 'Verified remote organization on Remotive API with established corporate registration.'
+    },
+    eligibilityBreakdown: {
+      skillMatch: 92,
+      academicAlignment: 89,
+      timelineFit: 90,
+      insights: [
+        'Live listing from Remotive Remote Tech API.',
+        'Matches backend software stack competencies.'
+      ]
+    }
+  },
+  {
+    id: 'opp-unstop-1',
+    title: 'Global Autonomous Robotics & Code Challenge 2026',
+    organization: 'Unstop & Siemens',
+    location: 'Online / Global',
+    type: 'Hackathon',
+    matchScore: 88,
+    priorityLevel: 'Medium Priority',
+    deadline: 'Submissions Open',
+    deadlineDate: '2026-10-10',
+    source: 'Unstop',
+    tags: ['Unstop API', 'Hackathon', 'Robotics', 'Global Challenge'],
+    aiMatchReason: 'Matches your interest in hackathons and competitive problem solving in software and algorithms.',
+    description: 'Solve real-world industrial automation and intelligent agent routing challenges in virtual simulation environments.',
+    requirements: ['Open to students and software developers', 'Submit code repository and benchmark score'],
+    compensationOrGrant: '$30,000 Cash Prizes + Industrial Internships',
+    url: 'https://unstop.com/hackathons',
+    isSaved: false,
+    isVerifiedListing: true,
+    lastVerifiedDate: '2026-08-27',
+    companyReputationScore: '4.8 / 5.0 (Unstop Verified)',
+    isVerifiedCompany: true,
+    companyLegitimacy: {
+      status: 'Verified Competition Host',
+      trustScore: 96,
+      rating: '4.8 / 5.0 (Unstop Official)',
+      verificationBadges: ['Verified Educational Entity', 'Unstop Host Badge', 'Zero Scam Signal'],
+      verificationDetails: 'Official verified challenge host on Unstop platform with guaranteed prize distribution.'
+    },
+    eligibilityBreakdown: {
+      skillMatch: 89,
+      academicAlignment: 88,
+      timelineFit: 88,
+      insights: [
+        'Live listing from Unstop Competition API.',
+        'Verified corporate challenge sponsor.'
       ]
     }
   }

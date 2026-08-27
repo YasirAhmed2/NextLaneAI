@@ -221,14 +221,35 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
           {/* TAB 1: OVERVIEW */}
           {activeTab === 'overview' && (
             <div className="space-y-6">
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#B38600] dark:text-[#D4AF37] mb-2">
-                  Opportunity Overview
-                </h3>
-                <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
-                  {opportunity.description || 'Join this verified high-impact opportunity to accelerate your technical expertise.'}
-                </p>
-              </div>
+              {/* Company Legitimacy & Verification Card */}
+              {opportunity.companyLegitimacy && (
+                <div className="p-4 rounded-xl bg-[var(--bg-subtle)] border border-emerald-500/40 shadow-xs space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-extrabold text-xs uppercase tracking-wider">
+                      <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>
+                        verified_user
+                      </span>
+                      <span>Company Legitimacy Verification</span>
+                    </div>
+                    <span className="text-xs font-mono font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+                      {opportunity.companyLegitimacy.trustScore}% Trust Verified
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                    {opportunity.companyLegitimacy.verificationDetails}
+                  </p>
+
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {opportunity.companyLegitimacy.verificationBadges.map((badge, bIdx) => (
+                      <span key={bIdx} className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[11px]">check_circle</span>
+                        {badge}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Structured Criteria Breakdown Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
