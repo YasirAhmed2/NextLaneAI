@@ -1,4 +1,19 @@
-export type OpportunityType = 'Internship' | 'Scholarship' | 'Hackathon' | 'Research';
+export interface CompanyLegitimacy {
+  status: string;
+  trustScore: number;
+  rating?: string;
+  verificationBadges: string[];
+  verificationDetails: string;
+}
+
+export interface AgentLogEntry {
+  id: string;
+  timestamp: string;
+  stage: 'SCRAPING' | 'VERIFYING' | 'MATCHING' | 'SCHEDULER' | 'ALERT';
+  source?: string;
+  message: string;
+  status: 'info' | 'success' | 'warning' | 'active';
+}
 
 export interface Opportunity {
   id: string;
@@ -7,6 +22,7 @@ export interface Opportunity {
   location: string;
   type: OpportunityType;
   matchScore: number;
+  priorityLevel?: string;
   deadline: string;
   deadlineDate?: string;
   deadlinePassed?: boolean;
@@ -21,6 +37,10 @@ export interface Opportunity {
   savedStatus?: 'To Review' | 'Planning' | 'Applied' | 'Closed';
   isVerifiedListing?: boolean;
   lastVerifiedDate?: string;
+  companyReputationScore?: string;
+  isVerifiedCompany?: boolean;
+  companyLegitimacy?: CompanyLegitimacy;
+  scrapedAt?: string;
   intakeSeason?: string;
   historicalReason?: string;
   estimatedNextCycle?: string;
