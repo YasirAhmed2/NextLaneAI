@@ -85,55 +85,50 @@ async def run_agent_endpoint(
     _agent_state["status"] = "running"
     _agent_state["last_run"] = datetime.datetime.utcnow().isoformat() + "Z"
 
-    def _bg_task():
-        global _agent_state
-        try:
-            log_agent_step("background_task_start", f"user='{user_dict.get('name')}' context=manual")
-            result = run_agent_sync(user_dict, force_rescrape=False, context="manual")
-            _agent_state["status"] = "idle"
-            _agent_state["last_result"] = {
-                "opportunities_scraped": result.get("opportunities_scraped", 0),
-                "matched_count": result.get("matched_count", 0),
-                "sources_used": result.get("sources_used", []),
-                "duration_ms": result.get("duration_ms", 0),
-                "alerts_sent": result.get("alerts_sent", 0),
-                "urgent_count": result.get("urgent_count", 0),
-                "plan_priority": result.get("plan", {}).get("priority", "all"),
-                "context": "manual",
-            }
-            _agent_state["last_trace"] = {
-                "user": user_dict.get("name"),
-                "context": "manual",
-                "timestamp": result.get("timestamp"),
-                "duration_ms": result.get("duration_ms", 0),
-                "opportunities_scraped": result.get("opportunities_scraped", 0),
-                "matched_count": result.get("matched_count", 0),
-                "alerts_sent": result.get("alerts_sent", 0),
-                "sources_used": result.get("sources_used", []),
-                "plan": result.get("plan", {}),
-            }
-            _agent_state["last_steps_log"] = result.get("steps_log", [])
-            _agent_state["last_timing"] = result.get("timing", {})
-            _agent_state["runs_completed"] = _agent_state.get("runs_completed", 0) + 1
-            log_agent_step(
-                "background_task_complete",
-                f"matched={result.get('matched_count', 0)}, "
-                f"alerts={result.get('alerts_sent', 0)}, "
-                f"duration={result.get('duration_ms', 0)}ms"
-            )
-        except Exception as e:
-            _agent_state["status"] = "error"
-            log_error("agent_background_task", e)
+    try:
+        log_agent_step("agent_endpoint_start", f"user='{user_dict.get('name')}' context=manual")
+        result = await agent_orchestrator.execute_agent(user_dict, force_rescrape=True, context="manual")
+        _agent_state["status"] = "idle"
+        _agent_state["last_result"] = {
+            "opportunities_scraped": result.get("opportunities_scraped", 0),
+            "matched_count": result.get("matched_count", 0),
+            "sources_used": result.get("sources_used", []),
+            "duration_ms": result.get("duration_ms", 0),
+            "alerts_sent": result.get("alerts_sent", 0),
+            "urgent_count": result.get("urgent_count", 0),
+            "plan_priority": result.get("plan", {}).get("priority", "all"),
+            "context": "manual",
+        }
+        _agent_state["last_trace"] = {
+            "user": user_dict.get("name"),
+            "context": "manual",
+            "timestamp": result.get("timestamp"),
+            "duration_ms": result.get("duration_ms", 0),
+            "opportunities_scraped": result.get("opportunities_scraped", 0),
+            "matched_count": result.get("matched_count", 0),
+            "alerts_sent": result.get("alerts_sent", 0),
+            "sources_used": result.get("sources_used", []),
+            "plan": result.get("plan", {}),
+        }
+        _agent_state["last_steps_log"] = result.get("steps_log", [])
+        _agent_state["last_timing"] = result.get("timing", {})
+        _agent_state["runs_completed"] = _agent_state.get("runs_completed", 0) + 1
 
-    background_tasks.add_task(_bg_task)
-
-    return {
-        "status": "Agent running",
-        "message": "Autonomous agent pipeline started in background.",
-        "user": user_dict.get("name"),
-        "emailAlerts": bool(user_dict.get("email")),
-        "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
-    }
+        return {
+            "status": "completed",
+            "message": "Autonomous agent discovery and matching cycle complete.",
+            "user": user_dict.get("name"),
+            "opportunitiesScraped": result.get("opportunities_scraped", 0),
+            "matchedCount": result.get("matched_count", 0),
+            "sourcesUsed": result.get("sources_used", []),
+            "opportunities": result.get("matched_results", []),
+            "stepsLog": result.get("steps_log", []),
+            "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
+        }
+    except Exception as e:
+        _agent_state["status"] = "error"
+        log_error("agent_endpoint_task", e)
+        raise HTTPException(status_code=500, detail=f"Agent execution failed: {str(e)}")
 
 
 # ── POST /agent/plan ─────────────────────────────────────────────────────────

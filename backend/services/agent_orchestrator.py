@@ -33,22 +33,13 @@ from utils.logger import log_agent_step, log_event, log_error, log_plan, log_too
 
 # ── Tool Registry ─────────────────────────────────────────────────────────────
 TOOL_REGISTRY: Dict[str, Any] = {
-    "scrape_linkedin_jobs": scraping_service.scrape_linkedin_jobs,
-    "scrape_indeed_jobs": scraping_service.scrape_indeed_jobs,
-    "scrape_rozee_pk": scraping_service.scrape_rozee_pk,
-    "scrape_mustakbil": scraping_service.scrape_mustakbil,
-    "scrape_glassdoor_jobs": scraping_service.scrape_glassdoor_jobs,
-    "scrape_remoteok_jobs": scraping_service.scrape_remoteok_jobs,
-    "scrape_internee_pk": scraping_service.scrape_internee_pk,
-    "scrape_international_scholarships": scraping_service.scrape_international_scholarships,
-    "scrape_iefa_scholarships": scraping_service.scrape_iefa_scholarships,
-    "scrape_international_student_scholarships": scraping_service.scrape_international_student_scholarships,
-    "scrape_masters_portal_scholarships": scraping_service.scrape_masters_portal_scholarships,
-    "scrape_scholars4dev": scraping_service.scrape_scholars4dev,
-    "scrape_opportunities_corner": scraping_service.scrape_opportunities_corner,
-    "scrape_scholarships": scraping_service.scrape_scholarships,
     "scrape_devpost": scraping_service.scrape_devpost,
+    "scrape_remotive": scraping_service.scrape_remotive,
     "scrape_unstop": scraping_service.scrape_unstop,
+    "scrape_remoteok_jobs": scraping_service.scrape_remoteok_jobs,
+    "scrape_arbeitnow": scraping_service.scrape_arbeitnow,
+    "scrape_jobicy": scraping_service.scrape_jobicy,
+    "scrape_linkedin_jobs": scraping_service.scrape_linkedin_jobs,
     "scrape_mlh": scraping_service.scrape_mlh,
 }
 
@@ -138,8 +129,7 @@ class AgentOrchestrator:
             sources_used = selected_sources
             timing["scraping_ms"] = round((time.monotonic() - scrape_start) * 1000)
 
-            # Merge seed baseline & deduplicate
-            scraped_items = scraping_service._merge_seed_data(scraped_items)
+            # Deduplicate items
             scraped_items = scraping_service._deduplicate(scraped_items)
             _log("Scraper Agent", "tool_execution_complete", f"{len(scraped_items)} unique opportunities collected")
 

@@ -106,9 +106,9 @@ async def lifespan(app: FastAPI):
     if scheduler and _scheduler_available:
         scheduler.add_job(
             periodic_agent_cycle,
-            trigger=IntervalTrigger(minutes=30),
+            trigger=IntervalTrigger(minutes=60),
             id="autonomous_scrape_cycle",
-            name="NextLane AI — Autonomous 30-min Scraping Cycle",
+            name="NextLane AI — Autonomous Hourly Scraping Cycle",
             replace_existing=True,
             max_instances=1,  # Prevent overlap
             misfire_grace_time=120,  # Allow up to 2min late start
@@ -116,7 +116,7 @@ async def lifespan(app: FastAPI):
         scheduler.start()
         log_agent_step(
             "scheduler_started",
-            "Autonomous agent scheduler active — scraping every 30 minutes"
+            "Autonomous agent scheduler active — scraping every 60 minutes (hourly)"
         )
     else:
         log_agent_step(

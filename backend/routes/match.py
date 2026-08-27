@@ -8,7 +8,7 @@ from utils.logger import log_event, log_error
 router = APIRouter(tags=["Matching"])
 
 @router.post("/match-all", response_model=List[Dict[str, Any]])
-def match_all_opportunities(profile: UserProfileRequest):
+async def match_all_opportunities(profile: UserProfileRequest):
     """
     Accepts user profile (skills, education, interests, name)
     and returns ranked opportunities with AI match scores and reasoning explanations.
@@ -30,7 +30,7 @@ def match_all_opportunities(profile: UserProfileRequest):
         # Persist user profile interaction in memory/Firestore
         firestore_service.save_user(user_dict)
 
-        results = matching_service.match_all(user_dict)
+        results = await matching_service.match_all_async(user_dict)
         return results
     except Exception as e:
         log_error("route_match_all", e)
