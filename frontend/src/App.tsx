@@ -444,8 +444,8 @@ export default function App() {
         </main>
       </div>
 
-      {/* 24-Hour Urgent Deadline Popup Alert */}
-      {!isUrgentModalDismissed && opportunities.filter((o) => !appliedIds.includes(o.id) && isUrgentUnder24h(o)).length > 0 && (
+      {/* 24-Hour Urgent Deadline Popup Alert — Triggers ONLY inside Dashboard after Login for REAL Scraped Items */}
+      {isAuthenticated && activeTab === 'opportunities' && !isUrgentModalDismissed && opportunities.filter((o) => !appliedIds.includes(o.id) && isUrgentUnder24h(o)).length > 0 && (
         <UrgentDeadlineModal
           urgentOpportunities={opportunities.filter((o) => !appliedIds.includes(o.id) && isUrgentUnder24h(o))}
           onClose={() => setIsUrgentModalDismissed(true)}

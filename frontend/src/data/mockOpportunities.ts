@@ -14,47 +14,6 @@ export const INITIAL_USER_PROFILE = {
 
 export const INITIAL_OPPORTUNITIES: Opportunity[] = [
   {
-    id: 'opp-urgent-24h-1',
-    title: 'Global AI Agents & Multi-Modal Hackathon (Urgent Deadline)',
-    organization: 'Google Gemini & Anthropic',
-    location: 'Virtual / Worldwide',
-    type: 'Hackathon',
-    matchScore: 98,
-    priorityLevel: 'High Priority — Closing in 14 Hours',
-    deadline: 'Closing in 14 Hours',
-    deadlineDate: new Date(Date.now() + 14 * 3600 * 1000).toISOString(),
-    urgent24h: true,
-    remainingHours: 14.5,
-    source: 'Devpost Sentry',
-    tags: ['Urgent Deadline', 'Gemini API', '$75k Prize Pool', 'Hackathon'],
-    aiMatchReason: 'Urgent top-tier match for your verified competencies in AI engineering, Python, and multi-agent workflows.',
-    description: 'Build state-of-the-art multi-agent workflows, autonomous web scrapers, and task orchestrators using Gemini and Claude APIs.',
-    requirements: ['Open registration for global developers', 'Submit working repository & demo video within 14 hours'],
-    compensationOrGrant: '$75,000 Total Cash & Google Cloud Credits',
-    url: 'https://devpost.com/hackathons',
-    isSaved: false,
-    isVerifiedListing: true,
-    lastVerifiedDate: '2026-08-30',
-    companyReputationScore: '4.9 / 5.0 (Google Verified Host)',
-    isVerifiedCompany: true,
-    companyLegitimacy: {
-      status: 'Official Host Entity',
-      trustScore: 99,
-      rating: '4.9 / 5.0 (Google Verified)',
-      verificationBadges: ['Verified Enterprise', 'SSL Domain Cleared', 'Anti-Scam Sentry Verified', 'Escrowed Prize Pool'],
-      verificationDetails: 'Official verified Hackathon organizer on Devpost platform with verified prize distribution.'
-    },
-    eligibilityBreakdown: {
-      skillMatch: 99,
-      academicAlignment: 96,
-      timelineFit: 98,
-      insights: [
-        'Urgent <24h deadline detected by NextLane AI sentry.',
-        'High match score based on AI & Web Development skills.'
-      ]
-    }
-  },
-  {
     id: 'opp-devpost-1',
     title: 'AI Agents & Autonomous Workflows Hackathon 2026',
     organization: 'Devpost & Anthropic',

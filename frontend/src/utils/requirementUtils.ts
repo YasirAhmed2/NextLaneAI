@@ -81,10 +81,26 @@ export function getRemainingDeadlineHours(opportunity: Opportunity): number | nu
 }
 
 /**
+ * Checks if an opportunity comes from real live scraping (not initial static mock data).
+ */
+export function isRealScrapedOpportunity(opportunity: Opportunity): boolean {
+  if (opportunity.isLiveScraped) return true;
+  if (opportunity.scrapedAt && typeof opportunity.scrapedAt === 'string') {
+    return true;
+  }
+  const liveSources = ['devpost', 'remotive', 'unstop', 'remoteok', 'arbeitnow', 'jobicy', 'linkedin', 'mlh'];
+  const src = (opportunity.source || '').toLowerCase();
+  return liveSources.some((s) => src.includes(s)) && Boolean(opportunity.scrapedAt);
+}
+
+/**
  * Checks if an opportunity strictly qualifies for <24h urgent deadline alert.
+ * Must be a REAL scraped opportunity (not mock data).
  */
 export function isUrgentUnder24h(opportunity: Opportunity): boolean {
   if (opportunity.deadlinePassed) return false;
+  if (!isRealScrapedOpportunity(opportunity)) return false;
+
   if (opportunity.urgent24h) return true;
 
   const hours = getRemainingDeadlineHours(opportunity);

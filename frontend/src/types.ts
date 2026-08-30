@@ -43,6 +43,7 @@ export interface Opportunity {
   isVerifiedCompany?: boolean;
   companyLegitimacy?: CompanyLegitimacy;
   scrapedAt?: string;
+  isLiveScraped?: boolean;
   intakeSeason?: string;
   historicalReason?: string;
   estimatedNextCycle?: string;

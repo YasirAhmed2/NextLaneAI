@@ -85,6 +85,9 @@ export const opportraService = {
             companyLegitimacy,
             isVerifiedCompany: item.isVerifiedCompany ?? true,
             scrapedAt: item.scrapedAt || new Date().toISOString(),
+            isLiveScraped: true,
+            urgent24h: Boolean(item.urgent24h),
+            remainingHours: item.remainingHours,
             eligibilityBreakdown: item.eligibilityBreakdown || {
               skillMatch: Math.min(99, score + 2),
               academicAlignment: Math.min(99, score - 1),
