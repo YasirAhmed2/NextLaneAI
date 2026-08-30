@@ -41,6 +41,8 @@ TOOL_REGISTRY: Dict[str, Any] = {
     "scrape_jobicy": scraping_service.scrape_jobicy,
     "scrape_linkedin_jobs": scraping_service.scrape_linkedin_jobs,
     "scrape_mlh": scraping_service.scrape_mlh,
+    "scrape_opportunities_corner": scraping_service.scrape_opportunities_corner,
+    "scrape_scholarships": scraping_service.scrape_scholarships,
 }
 
 
