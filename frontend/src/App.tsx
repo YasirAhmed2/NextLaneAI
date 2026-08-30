@@ -21,11 +21,14 @@ import { SavedOpportunities } from './components/SavedOpportunities';
 import { MissedOpportunities } from './components/MissedOpportunities';
 import { PathwaysView } from './components/PathwaysView';
 import { OpportunityDetailModal } from './components/OpportunityDetailModal';
+import { UrgentDeadlineModal } from './components/UrgentDeadlineModal';
+import { AutoApplyAgentModal } from './components/AutoApplyAgentModal';
 import { PremiumModal } from './components/PremiumModal';
 import { SettingsModal } from './components/SettingsModal';
 import { AuthView } from './components/AuthView';
 import { authService } from './services/authService';
 import { opportraService } from './services/opportraService';
+import { isUrgentUnder24h } from './utils/requirementUtils';
 
 const EMPTY_USER_PROFILE: UserProfile = {
   fullName: '',
@@ -64,6 +67,11 @@ export default function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isPremiumOpen, setIsPremiumOpen] = useState(false);
   const [isAgentRefreshing, setIsAgentRefreshing] = useState(false);
+
+  // Urgent 24h & Auto-Apply Agent States
+  const [isUrgentModalDismissed, setIsUrgentModalDismissed] = useState<boolean>(false);
+  const [autoApplyTarget, setAutoApplyTarget] = useState<Opportunity | null>(null);
+
   const [appliedIds, setAppliedIds] = useState<string[]>(() => {
     try {
       const stored = localStorage.getItem('nextlane_applied_ids');
@@ -405,6 +413,7 @@ export default function App() {
               onOpenAuth={handleOpenAuth}
               onRefreshAgent={handleRefreshAgent}
               isRefreshing={isAgentRefreshing}
+              onAutoApply={(opp) => setAutoApplyTarget(opp)}
             />
           )}
 
@@ -435,6 +444,44 @@ export default function App() {
         </main>
       </div>
 
+      {/* 24-Hour Urgent Deadline Popup Alert */}
+      {!isUrgentModalDismissed && opportunities.filter((o) => !appliedIds.includes(o.id) && isUrgentUnder24h(o)).length > 0 && (
+        <UrgentDeadlineModal
+          urgentOpportunities={opportunities.filter((o) => !appliedIds.includes(o.id) && isUrgentUnder24h(o))}
+          onClose={() => setIsUrgentModalDismissed(true)}
+          onAutoApply={(opp) => {
+            setIsUrgentModalDismissed(true);
+            setAutoApplyTarget(opp);
+          }}
+          onSelectOpportunity={(opp) => setSelectedOpportunity(opp)}
+        />
+      )}
+
+      {/* Auto-Apply Autonomous AI Agent Modal */}
+      {autoApplyTarget && (
+        <AutoApplyAgentModal
+          opportunity={autoApplyTarget}
+          userProfile={userProfile}
+          onClose={() => setAutoApplyTarget(null)}
+          onCompleteApply={(oppId) => {
+            handleMarkApplied(oppId);
+            if (autoApplyTarget) {
+              setNotifications((prev) => [
+                {
+                  id: `notif-${Date.now()}`,
+                  title: '⚡ Auto-Apply Agent Complete',
+                  description: `Successfully auto-applied to ${autoApplyTarget.title} at ${autoApplyTarget.organization}`,
+                  time: 'Just now',
+                  read: false,
+                  type: 'match'
+                },
+                ...prev
+              ]);
+            }
+          }}
+        />
+      )}
+
       {/* Opportunity Detail Modal */}
       <OpportunityDetailModal
         opportunity={selectedOpportunity}
@@ -443,6 +490,7 @@ export default function App() {
         userProfile={userProfile}
         onMarkApplied={handleMarkApplied}
         isApplied={selectedOpportunity ? appliedIds.includes(selectedOpportunity.id) : false}
+        onAutoApply={(opp) => setAutoApplyTarget(opp)}
       />
 
       {/* Premium Membership Modal */}

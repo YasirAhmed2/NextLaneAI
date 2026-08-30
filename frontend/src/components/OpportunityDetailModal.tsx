@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Opportunity, UserProfile } from '../types';
 import { opportraService } from '../services/opportraService';
+import { filterRequirements, isScholarshipType } from '../utils/requirementUtils';
 
 interface OpportunityDetailModalProps {
   opportunity: Opportunity | null;
@@ -9,6 +10,7 @@ interface OpportunityDetailModalProps {
   userProfile: UserProfile;
   onMarkApplied?: (id: string) => void;
   isApplied?: boolean;
+  onAutoApply?: (opportunity: Opportunity) => void;
 }
 
 export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
@@ -18,6 +20,7 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
   userProfile,
   onMarkApplied,
   isApplied = false,
+  onAutoApply,
 }) => {
   const [applied, setApplied] = useState<boolean>(isApplied);
   const [copiedPitch, setCopiedPitch] = useState<boolean>(false);
@@ -293,7 +296,7 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
                   Verified Requirements
                 </h3>
                 <div className="space-y-2">
-                  {opportunity.requirements.map((req, idx) => (
+                  {filterRequirements(opportunity.requirements, opportunity.type).map((req, idx) => (
                     <div key={idx} className="flex items-start gap-2.5 text-xs text-[var(--text-secondary)]">
                       <span className="material-symbols-outlined text-sm text-[#B38600] dark:text-[#D4AF37] shrink-0 mt-0.5">
                         check_circle
@@ -524,6 +527,19 @@ export const OpportunityDetailModal: React.FC<OpportunityDetailModalProps> = ({
           </button>
 
           <div className="flex flex-wrap items-center gap-2.5 w-full min-[480px]:w-auto justify-end">
+            {onAutoApply && !opportunity.deadlinePassed && (
+              <button
+                onClick={() => {
+                  onClose();
+                  onAutoApply(opportunity);
+                }}
+                className="py-2.5 sm:py-3 px-4 rounded-xl font-poppins font-black text-xs uppercase tracking-wider bg-gradient-to-r from-amber-500 to-[#D4AF37] text-slate-950 flex items-center justify-center gap-1.5 cursor-pointer shadow-md hover:brightness-110 active:scale-95 transition-all"
+              >
+                <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
+                <span>Auto-Apply Agent</span>
+              </button>
+            )}
+
             <button
               onClick={handleToggleApplied}
               className={`py-2.5 sm:py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer transition-all ${

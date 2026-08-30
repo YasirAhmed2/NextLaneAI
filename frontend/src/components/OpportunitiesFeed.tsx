@@ -13,6 +13,7 @@ interface OpportunitiesFeedProps {
   onOpenAuth?: (mode?: 'login' | 'register') => void;
   onRefreshAgent?: () => void;
   isRefreshing?: boolean;
+  onAutoApply?: (opp: Opportunity) => void;
 }
 
 export const OpportunitiesFeed: React.FC<OpportunitiesFeedProps> = ({
@@ -25,6 +26,7 @@ export const OpportunitiesFeed: React.FC<OpportunitiesFeedProps> = ({
   onOpenAuth,
   onRefreshAgent,
   isRefreshing = false,
+  onAutoApply,
 }) => {
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
 
@@ -399,15 +401,11 @@ export const OpportunitiesFeed: React.FC<OpportunitiesFeedProps> = ({
                 </div>
               </div>
 
-              {/* Action Buttons: [Save] [Open Link] */}
-              <div className="relative z-10 flex items-center gap-2 pt-3 border-t border-[var(--border)]">
+              {/* Action Buttons: [Save] [Auto-Apply] [Portal] */}
+              <div className="relative z-10 flex flex-wrap items-center gap-2 pt-3 border-t border-[var(--border)]">
                 <button
                   onClick={() => handleSaveClick(opp.id)}
-                  className={`flex-1 py-2.5 px-3 rounded-xl border text-xs font-bold uppercase tracking-wider flex justify-center items-center gap-1.5 transition-colors cursor-pointer ${
-                    opp.isSaved
-                      ? 'bg-[#D4AF37]/20 border-[#D4AF37] text-[#8A6700] dark:text-[#D4AF37]'
-                      : 'border-[var(--border)] bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:border-[#D4AF37] hover:text-[#B38600] dark:hover:text-[#D4AF37]'
-                  }`}
+                  className="px-3 py-2 rounded-xl border text-xs font-bold uppercase tracking-wider flex justify-center items-center gap-1 transition-colors cursor-pointer border-[var(--border)] bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:border-[#D4AF37] hover:text-[#B38600] dark:hover:text-[#D4AF37]"
                   title={opp.isSaved ? 'Remove from Saved' : 'Save Opportunity'}
                 >
                   <span
@@ -416,19 +414,29 @@ export const OpportunitiesFeed: React.FC<OpportunitiesFeedProps> = ({
                   >
                     {opp.isSaved ? 'bookmark' : 'bookmark_border'}
                   </span>
-                  <span>{opp.isSaved ? 'Saved' : 'Save'}</span>
                 </button>
 
+                {onAutoApply && !opp.deadlinePassed && (
+                  <button
+                    onClick={() => onAutoApply(opp)}
+                    className="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-[#D4AF37] text-slate-950 font-poppins font-black text-xs uppercase tracking-wider flex justify-center items-center gap-1 shadow-sm hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
+                    <span>Auto-Apply</span>
+                  </button>
+                )}
+
                 <a
-                  href={opp.url && opp.url.startswith?.('http') ? opp.url : (opp.url || 'https://devpost.com')}
+                  href={opp.url && typeof opp.url === 'string' && opp.url.startsWith('http') ? opp.url : (opp.url || 'https://devpost.com')}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
-                  className="flex-1 py-2.5 px-4 rounded-xl btn-primary text-xs uppercase tracking-wider hover:opacity-95 transition-opacity flex justify-center items-center gap-1.5 cursor-pointer shadow-xs font-bold text-[#1C1C1C]"
+                  className="py-2 px-3 rounded-xl btn-primary text-xs uppercase tracking-wider hover:opacity-95 transition-opacity flex justify-center items-center gap-1 cursor-pointer shadow-xs font-bold text-[#1C1C1C]"
+                  title="Open Official Application Portal"
                 >
-                  <span>Apply Now</span>
+                  <span>Portal</span>
                   <span className="material-symbols-outlined text-sm font-bold">open_in_new</span>
                 </a>
               </div>

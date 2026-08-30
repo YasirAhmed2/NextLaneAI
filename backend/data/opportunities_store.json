@@ -7558,5 +7558,1205 @@
       ]
     },
     "scrapedAt": "2026-08-27T10:29:09.306628Z"
+  },
+  {
+    "id": "devpost-1-5983",
+    "title": "RevenueCat Shipaton 2026",
+    "organization": "RevenueCat",
+    "location": "Virtual / Global",
+    "type": "Hackathon",
+    "deadline": "Jul 31 - Oct 01, 2026",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Devpost",
+    "tags": [
+      "Devpost API",
+      "Hackathon",
+      "Global Prize Pool"
+    ],
+    "description": "Participate in RevenueCat Shipaton 2026 on Devpost. Compete with global developers.",
+    "requirements": [
+      "Open registration for global developers",
+      "Submit working software demo before deadline"
+    ],
+    "compensationOrGrant": "$<span data-currency-value>740,000</span>",
+    "url": "https://revenuecat-shipaton-2026.devpost.com/",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.9 / 5.0 (Devpost Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.9 / 5.0 (Devpost Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for RevenueCat."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Virtual / Global",
+      "insights": [
+        "Direct live listing from official Devpost platform API.",
+        "Verified Organization: RevenueCat."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.445603Z"
+  },
+  {
+    "id": "devpost-2-6054",
+    "title": "All Things Agentic Hackathon",
+    "organization": "Google",
+    "location": "Virtual / Global",
+    "type": "Hackathon",
+    "deadline": "Aug 04 - 31, 2026",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Devpost",
+    "tags": [
+      "Devpost API",
+      "Hackathon",
+      "Global Prize Pool"
+    ],
+    "description": "Participate in All Things Agentic Hackathon on Devpost. Compete with global developers.",
+    "requirements": [
+      "Open registration for global developers",
+      "Submit working software demo before deadline"
+    ],
+    "compensationOrGrant": "$<span data-currency-value>180,000</span>",
+    "url": "https://allthingsagentichackathon.devpost.com/",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.9 / 5.0 (Devpost Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.9 / 5.0 (Devpost Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for Google."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Virtual / Global",
+      "insights": [
+        "Direct live listing from official Devpost platform API.",
+        "Verified Organization: Google."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.445702Z"
+  },
+  {
+    "id": "devpost-3-5724",
+    "title": "Agentic Cinema: The Blockbuster Hackathon",
+    "organization": "Google",
+    "location": "Virtual / Global",
+    "type": "Hackathon",
+    "deadline": "Jul 27 - Sep 09, 2026",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Devpost",
+    "tags": [
+      "Devpost API",
+      "Hackathon",
+      "Global Prize Pool"
+    ],
+    "description": "Participate in Agentic Cinema: The Blockbuster Hackathon on Devpost. Compete with global developers.",
+    "requirements": [
+      "Open registration for global developers",
+      "Submit working software demo before deadline"
+    ],
+    "compensationOrGrant": "$<span data-currency-value>75,000</span>",
+    "url": "https://agentic-cinema.devpost.com/",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.9 / 5.0 (Devpost Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.9 / 5.0 (Devpost Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for Google."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Virtual / Global",
+      "insights": [
+        "Direct live listing from official Devpost platform API.",
+        "Verified Organization: Google."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.445803Z"
+  },
+  {
+    "id": "devpost-4-2260",
+    "title": "Agents for Humans Hackathon",
+    "organization": "Amazon",
+    "location": "Virtual / Global",
+    "type": "Hackathon",
+    "deadline": "Aug 10 - Sep 14, 2026",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Devpost",
+    "tags": [
+      "Devpost API",
+      "Hackathon",
+      "Global Prize Pool"
+    ],
+    "description": "Participate in Agents for Humans Hackathon on Devpost. Compete with global developers.",
+    "requirements": [
+      "Open registration for global developers",
+      "Submit working software demo before deadline"
+    ],
+    "compensationOrGrant": "$<span data-currency-value>40,000</span>",
+    "url": "https://agentsforhumans.devpost.com/",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.9 / 5.0 (Devpost Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.9 / 5.0 (Devpost Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for Amazon."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Virtual / Global",
+      "insights": [
+        "Direct live listing from official Devpost platform API.",
+        "Verified Organization: Amazon."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.445846Z"
+  },
+  {
+    "id": "devpost-5-9836",
+    "title": "The WebMCP Challenge",
+    "organization": "OpenAI",
+    "location": "Virtual / Global",
+    "type": "Hackathon",
+    "deadline": "Aug 25 - Sep 03, 2026",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Devpost",
+    "tags": [
+      "Devpost API",
+      "Hackathon",
+      "Global Prize Pool"
+    ],
+    "description": "Participate in The WebMCP Challenge on Devpost. Compete with global developers.",
+    "requirements": [
+      "Open registration for global developers",
+      "Submit working software demo before deadline"
+    ],
+    "compensationOrGrant": "$<span data-currency-value>35,000</span>",
+    "url": "https://webmcp.devpost.com/",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.9 / 5.0 (Devpost Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.9 / 5.0 (Devpost Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for OpenAI."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Virtual / Global",
+      "insights": [
+        "Direct live listing from official Devpost platform API.",
+        "Verified Organization: OpenAI."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.445900Z"
+  },
+  {
+    "id": "devpost-6-9761",
+    "title": "CALL-E: Your Code Is Calling",
+    "organization": "CALL-E",
+    "location": "Virtual / Global",
+    "type": "Hackathon",
+    "deadline": "Jul 23 - Sep 14, 2026",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Devpost",
+    "tags": [
+      "Devpost API",
+      "Hackathon",
+      "Global Prize Pool"
+    ],
+    "description": "Participate in CALL-E: Your Code Is Calling on Devpost. Compete with global developers.",
+    "requirements": [
+      "Open registration for global developers",
+      "Submit working software demo before deadline"
+    ],
+    "compensationOrGrant": "$<span data-currency-value>10,000</span>",
+    "url": "https://call-e.devpost.com/",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.9 / 5.0 (Devpost Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.9 / 5.0 (Devpost Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for CALL-E."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Virtual / Global",
+      "insights": [
+        "Direct live listing from official Devpost platform API.",
+        "Verified Organization: CALL-E."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.446266Z"
+  },
+  {
+    "id": "devpost-7-237",
+    "title": "AI Builders Hackathon",
+    "organization": "OSC",
+    "location": "Virtual / Global",
+    "type": "Hackathon",
+    "deadline": "Aug 21 - Sep 15, 2026",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Devpost",
+    "tags": [
+      "Devpost API",
+      "Hackathon",
+      "Global Prize Pool"
+    ],
+    "description": "Participate in AI Builders Hackathon on Devpost. Compete with global developers.",
+    "requirements": [
+      "Open registration for global developers",
+      "Submit working software demo before deadline"
+    ],
+    "compensationOrGrant": "$<span data-currency-value>33,900</span>",
+    "url": "https://ai-builders-hackathon-2026.devpost.com/",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.9 / 5.0 (Devpost Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.9 / 5.0 (Devpost Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for OSC."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Virtual / Global",
+      "insights": [
+        "Direct live listing from official Devpost platform API.",
+        "Verified Organization: OSC."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.446420Z"
+  },
+  {
+    "id": "devpost-8-3752",
+    "title": "VoltHacks",
+    "organization": "Dialogate",
+    "location": "Virtual / Global",
+    "type": "Hackathon",
+    "deadline": "May 22 - Sep 05, 2026",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Devpost",
+    "tags": [
+      "Devpost API",
+      "Hackathon",
+      "Global Prize Pool"
+    ],
+    "description": "Participate in VoltHacks on Devpost. Compete with global developers.",
+    "requirements": [
+      "Open registration for global developers",
+      "Submit working software demo before deadline"
+    ],
+    "compensationOrGrant": "$<span data-currency-value>35,785</span>",
+    "url": "https://volthacks.devpost.com/",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.9 / 5.0 (Devpost Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.9 / 5.0 (Devpost Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for Dialogate."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Virtual / Global",
+      "insights": [
+        "Direct live listing from official Devpost platform API.",
+        "Verified Organization: Dialogate."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.446498Z"
+  },
+  {
+    "id": "devpost-9-910",
+    "title": "3D Websites Hackathon",
+    "organization": "Tanishq Kumar",
+    "location": "Virtual / Global",
+    "type": "Hackathon",
+    "deadline": "Jun 22 - Aug 31, 2026",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Devpost",
+    "tags": [
+      "Devpost API",
+      "Hackathon",
+      "Global Prize Pool"
+    ],
+    "description": "Participate in 3D Websites Hackathon on Devpost. Compete with global developers.",
+    "requirements": [
+      "Open registration for global developers",
+      "Submit working software demo before deadline"
+    ],
+    "compensationOrGrant": "$<span data-currency-value>55</span>",
+    "url": "https://3d-websites-hackathon.devpost.com/",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.9 / 5.0 (Devpost Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.9 / 5.0 (Devpost Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for Tanishq Kumar."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Virtual / Global",
+      "insights": [
+        "Direct live listing from official Devpost platform API.",
+        "Verified Organization: Tanishq Kumar."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.446544Z"
+  },
+  {
+    "id": "unstop-1-3747",
+    "title": "HackCelestial 3.0",
+    "organization": "Pillai University, Navi Mumbai",
+    "location": "Online / Global",
+    "type": "Hackathon",
+    "deadline": "Open Registration",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Unstop",
+    "tags": [
+      "Unstop API",
+      "Hackathon",
+      "Student Competition"
+    ],
+    "description": "HackCelestial 3.0 challenge hosted by Pillai University, Navi Mumbai on Unstop platform.",
+    "requirements": [
+      "Student / developer eligibility",
+      "Online submission before deadline"
+    ],
+    "compensationOrGrant": "Cash Awards & Certificates",
+    "url": "https://unstop.com/hackathons/hackcelestial-30-pillai-university-navi-mumbai-1737808",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.8 / 5.0 (Unstop Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.8 / 5.0 (Unstop Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for Pillai University, Navi Mumbai."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Online / Global",
+      "insights": [
+        "Direct live listing from official Unstop platform API.",
+        "Verified Organization: Pillai University, Navi Mumbai."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.773489Z"
+  },
+  {
+    "id": "unstop-2-6370",
+    "title": "PromptCraft 1.0 \u2013 24-Hour National-Level Hackathon",
+    "organization": "Meerut Institute of Technology (MIT), Meerut, Uttar Pradesh",
+    "location": "Online / Global",
+    "type": "Hackathon",
+    "deadline": "Open Registration",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Unstop",
+    "tags": [
+      "Unstop API",
+      "Hackathon",
+      "Student Competition"
+    ],
+    "description": "PromptCraft 1.0 \u2013 24-Hour National-Level Hackathon challenge hosted by Meerut Institute of Technology (MIT), Meerut, Uttar Pradesh on Unstop platform.",
+    "requirements": [
+      "Student / developer eligibility",
+      "Online submission before deadline"
+    ],
+    "compensationOrGrant": "Cash Awards & Certificates",
+    "url": "https://unstop.com/hackathons/promptcraft-10-24-hour-national-level-hackathon-meerut-institute-of-technology-mit-meerut-uttar-pradesh-1745416",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.8 / 5.0 (Unstop Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.8 / 5.0 (Unstop Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for Meerut Institute of Technology (MIT), Meerut, Uttar Pradesh."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Online / Global",
+      "insights": [
+        "Direct live listing from official Unstop platform API.",
+        "Verified Organization: Meerut Institute of Technology (MIT), Meerut, Uttar Pradesh."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.784622Z"
+  },
+  {
+    "id": "unstop-3-4095",
+    "title": "GopwnIt CTF",
+    "organization": "gopwnit",
+    "location": "Online / Global",
+    "type": "Hackathon",
+    "deadline": "Open Registration",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Unstop",
+    "tags": [
+      "Unstop API",
+      "Hackathon",
+      "Student Competition"
+    ],
+    "description": "GopwnIt CTF challenge hosted by gopwnit on Unstop platform.",
+    "requirements": [
+      "Student / developer eligibility",
+      "Online submission before deadline"
+    ],
+    "compensationOrGrant": "Cash Awards & Certificates",
+    "url": "https://unstop.com/hackathons/gopwnit-ctf-gopwnit-1745426",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.8 / 5.0 (Unstop Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.8 / 5.0 (Unstop Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for gopwnit."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Online / Global",
+      "insights": [
+        "Direct live listing from official Unstop platform API.",
+        "Verified Organization: gopwnit."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.784739Z"
+  },
+  {
+    "id": "unstop-4-7380",
+    "title": "GAME-ATHON",
+    "organization": "Narsee Monjee Institute of Management Studies (NMIMS), Chandigarh",
+    "location": "Online / Global",
+    "type": "Hackathon",
+    "deadline": "Open Registration",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Unstop",
+    "tags": [
+      "Unstop API",
+      "Hackathon",
+      "Student Competition"
+    ],
+    "description": "GAME-ATHON challenge hosted by Narsee Monjee Institute of Management Studies (NMIMS), Chandigarh on Unstop platform.",
+    "requirements": [
+      "Student / developer eligibility",
+      "Online submission before deadline"
+    ],
+    "compensationOrGrant": "Cash Awards & Certificates",
+    "url": "https://unstop.com/hackathons/game-athon-anviksha-the-epoch-2026-narsee-monjee-institute-of-management-studies-nmims-chandigarh-1745439",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.8 / 5.0 (Unstop Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.8 / 5.0 (Unstop Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for Narsee Monjee Institute of Management Studies (NMIMS), Chandigarh."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Online / Global",
+      "insights": [
+        "Direct live listing from official Unstop platform API.",
+        "Verified Organization: Narsee Monjee Institute of Management Studies (NMIMS), Chandigarh."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.784782Z"
+  },
+  {
+    "id": "unstop-5-443",
+    "title": "Void Hacks() 8.0",
+    "organization": "Shri Vaishnav Vidyapeeth Vishwavidyalaya (SVVV), Indore",
+    "location": "Online / Global",
+    "type": "Hackathon",
+    "deadline": "Open Registration",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Unstop",
+    "tags": [
+      "Unstop API",
+      "Hackathon",
+      "Student Competition"
+    ],
+    "description": "Void Hacks() 8.0 challenge hosted by Shri Vaishnav Vidyapeeth Vishwavidyalaya (SVVV), Indore on Unstop platform.",
+    "requirements": [
+      "Student / developer eligibility",
+      "Online submission before deadline"
+    ],
+    "compensationOrGrant": "Cash Awards & Certificates",
+    "url": "https://unstop.com/hackathons/void-hacks-80-shri-vaishnav-vidyapeeth-vishwavidyalaya-svvv-indore-1745016",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.8 / 5.0 (Unstop Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.8 / 5.0 (Unstop Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for Shri Vaishnav Vidyapeeth Vishwavidyalaya (SVVV), Indore."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Online / Global",
+      "insights": [
+        "Direct live listing from official Unstop platform API.",
+        "Verified Organization: Shri Vaishnav Vidyapeeth Vishwavidyalaya (SVVV), Indore."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.784818Z"
+  },
+  {
+    "id": "unstop-6-623",
+    "title": "MARKATHON 2.0 \u2013 India's Biggest Marketing Innovation Challenge",
+    "organization": "IcyPluto",
+    "location": "Online / Global",
+    "type": "Hackathon",
+    "deadline": "Open Registration",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Unstop",
+    "tags": [
+      "Unstop API",
+      "Hackathon",
+      "Student Competition"
+    ],
+    "description": "MARKATHON 2.0 \u2013 India's Biggest Marketing Innovation Challenge challenge hosted by IcyPluto on Unstop platform.",
+    "requirements": [
+      "Student / developer eligibility",
+      "Online submission before deadline"
+    ],
+    "compensationOrGrant": "Cash Awards & Certificates",
+    "url": "https://unstop.com/hackathons/markathon-20-indias-biggest-marketing-innovation-challenge-icypluto-1745028",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.8 / 5.0 (Unstop Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.8 / 5.0 (Unstop Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for IcyPluto."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Online / Global",
+      "insights": [
+        "Direct live listing from official Unstop platform API.",
+        "Verified Organization: IcyPluto."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.784863Z"
+  },
+  {
+    "id": "unstop-7-3886",
+    "title": "Pitch the idea, Win the prize",
+    "organization": "Indian Institute of Technology (IIT), Guwahati",
+    "location": "Online / Global",
+    "type": "Hackathon",
+    "deadline": "Open Registration",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Unstop",
+    "tags": [
+      "Unstop API",
+      "Hackathon",
+      "Student Competition"
+    ],
+    "description": "Pitch the idea, Win the prize challenge hosted by Indian Institute of Technology (IIT), Guwahati on Unstop platform.",
+    "requirements": [
+      "Student / developer eligibility",
+      "Online submission before deadline"
+    ],
+    "compensationOrGrant": "Cash Awards & Certificates",
+    "url": "https://unstop.com/hackathons/pitch-the-idea-win-the-prize-iit-guwahati-1745074",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.8 / 5.0 (Unstop Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.8 / 5.0 (Unstop Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for Indian Institute of Technology (IIT), Guwahati."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Online / Global",
+      "insights": [
+        "Direct live listing from official Unstop platform API.",
+        "Verified Organization: Indian Institute of Technology (IIT), Guwahati."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.784930Z"
+  },
+  {
+    "id": "unstop-8-3466",
+    "title": "Hack 2 Ignite",
+    "organization": "GH Raisoini International Skill Tech University",
+    "location": "Online / Global",
+    "type": "Hackathon",
+    "deadline": "Open Registration",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Unstop",
+    "tags": [
+      "Unstop API",
+      "Hackathon",
+      "Student Competition"
+    ],
+    "description": "Hack 2 Ignite challenge hosted by GH Raisoini International Skill Tech University on Unstop platform.",
+    "requirements": [
+      "Student / developer eligibility",
+      "Online submission before deadline"
+    ],
+    "compensationOrGrant": "Cash Awards & Certificates",
+    "url": "https://unstop.com/hackathons/hack-2-ignite-gh-raisoini-international-skill-tech-university-1745045",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.8 / 5.0 (Unstop Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.8 / 5.0 (Unstop Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for GH Raisoini International Skill Tech University."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Online / Global",
+      "insights": [
+        "Direct live listing from official Unstop platform API.",
+        "Verified Organization: GH Raisoini International Skill Tech University."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.785003Z"
+  },
+  {
+    "id": "unstop-9-4319",
+    "title": "ISTE Crypt Online Assessment",
+    "organization": "National Institute of Technology (NIT)",
+    "location": "Online / Global",
+    "type": "Hackathon",
+    "deadline": "Open Registration",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Unstop",
+    "tags": [
+      "Unstop API",
+      "Hackathon",
+      "Student Competition"
+    ],
+    "description": "ISTE Crypt Online Assessment challenge hosted by National Institute of Technology (NIT) on Unstop platform.",
+    "requirements": [
+      "Student / developer eligibility",
+      "Online submission before deadline"
+    ],
+    "compensationOrGrant": "Cash Awards & Certificates",
+    "url": "https://unstop.com/hackathons/iste-crypt-online-assessment-national-institute-of-technology-nit-1744953",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.8 / 5.0 (Unstop Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.8 / 5.0 (Unstop Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for National Institute of Technology (NIT)."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Online / Global",
+      "insights": [
+        "Direct live listing from official Unstop platform API.",
+        "Verified Organization: National Institute of Technology (NIT)."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.785047Z"
+  },
+  {
+    "id": "unstop-10-6700",
+    "title": "MCA Coding Assessment",
+    "organization": "Aditya University",
+    "location": "Online / Global",
+    "type": "Hackathon",
+    "deadline": "Open Registration",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Unstop",
+    "tags": [
+      "Unstop API",
+      "Hackathon",
+      "Student Competition"
+    ],
+    "description": "MCA Coding Assessment challenge hosted by Aditya University on Unstop platform.",
+    "requirements": [
+      "Student / developer eligibility",
+      "Online submission before deadline"
+    ],
+    "compensationOrGrant": "Cash Awards & Certificates",
+    "url": "https://unstop.com/hackathons/mca-coding-assessment-aditya-university-1745099",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.8 / 5.0 (Unstop Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.8 / 5.0 (Unstop Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for Aditya University."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Online / Global",
+      "insights": [
+        "Direct live listing from official Unstop platform API.",
+        "Verified Organization: Aditya University."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.785081Z"
+  },
+  {
+    "id": "unstop-11-3742",
+    "title": "Navachar - Code Fest 2026",
+    "organization": "Meerut Institute of Technology (MIT), Meerut, Uttar Pradesh",
+    "location": "Online / Global",
+    "type": "Hackathon",
+    "deadline": "Open Registration",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Unstop",
+    "tags": [
+      "Unstop API",
+      "Hackathon",
+      "Student Competition"
+    ],
+    "description": "Navachar - Code Fest 2026 challenge hosted by Meerut Institute of Technology (MIT), Meerut, Uttar Pradesh on Unstop platform.",
+    "requirements": [
+      "Student / developer eligibility",
+      "Online submission before deadline"
+    ],
+    "compensationOrGrant": "Cash Awards & Certificates",
+    "url": "https://unstop.com/hackathons/navachar-code-fest-2026-meerut-institute-of-technology-mit-meerut-uttar-pradesh-1635968",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.8 / 5.0 (Unstop Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.8 / 5.0 (Unstop Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for Meerut Institute of Technology (MIT), Meerut, Uttar Pradesh."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Online / Global",
+      "insights": [
+        "Direct live listing from official Unstop platform API.",
+        "Verified Organization: Meerut Institute of Technology (MIT), Meerut, Uttar Pradesh."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.785162Z"
+  },
+  {
+    "id": "unstop-12-5416",
+    "title": "SemiCon Hackathon - Explore, Innovate & Build with Semiconductors | IIT Bombay",
+    "organization": "Indian Institute of Technology (IIT), Bombay",
+    "location": "Online / Global",
+    "type": "Hackathon",
+    "deadline": "Open Registration",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Unstop",
+    "tags": [
+      "Unstop API",
+      "Hackathon",
+      "Student Competition"
+    ],
+    "description": "SemiCon Hackathon - Explore, Innovate & Build with Semiconductors | IIT Bombay challenge hosted by Indian Institute of Technology (IIT), Bombay on Unstop platform.",
+    "requirements": [
+      "Student / developer eligibility",
+      "Online submission before deadline"
+    ],
+    "compensationOrGrant": "Cash Awards & Certificates",
+    "url": "https://unstop.com/hackathons/semicon-hackathon-explore-innovate-build-with-semiconductors-sarcathon-2026-iit-bombay-1744747",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.8 / 5.0 (Unstop Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.8 / 5.0 (Unstop Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for Indian Institute of Technology (IIT), Bombay."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Online / Global",
+      "insights": [
+        "Direct live listing from official Unstop platform API.",
+        "Verified Organization: Indian Institute of Technology (IIT), Bombay."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.785269Z"
+  },
+  {
+    "id": "unstop-13-8606",
+    "title": "2nd Washington Hackathon 2026",
+    "organization": "Washington University of Science and Technology",
+    "location": "Online / Global",
+    "type": "Hackathon",
+    "deadline": "Open Registration",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Unstop",
+    "tags": [
+      "Unstop API",
+      "Hackathon",
+      "Student Competition"
+    ],
+    "description": "2nd Washington Hackathon 2026 challenge hosted by Washington University of Science and Technology on Unstop platform.",
+    "requirements": [
+      "Student / developer eligibility",
+      "Online submission before deadline"
+    ],
+    "compensationOrGrant": "Cash Awards & Certificates",
+    "url": "https://unstop.com/hackathons/2nd-washington-hackathon-2026-washington-university-of-science-and-technology-1743516",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.8 / 5.0 (Unstop Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.8 / 5.0 (Unstop Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for Washington University of Science and Technology."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Online / Global",
+      "insights": [
+        "Direct live listing from official Unstop platform API.",
+        "Verified Organization: Washington University of Science and Technology."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.785355Z"
+  },
+  {
+    "id": "unstop-14-4502",
+    "title": "Caspian AI Agent",
+    "organization": "Caspian",
+    "location": "Online / Global",
+    "type": "Hackathon",
+    "deadline": "Open Registration",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Unstop",
+    "tags": [
+      "Unstop API",
+      "Hackathon",
+      "Student Competition"
+    ],
+    "description": "Caspian AI Agent challenge hosted by Caspian on Unstop platform.",
+    "requirements": [
+      "Student / developer eligibility",
+      "Online submission before deadline"
+    ],
+    "compensationOrGrant": "Cash Awards & Certificates",
+    "url": "https://unstop.com/hackathons/caspian-ai-agent-caspian-1744069",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.8 / 5.0 (Unstop Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.8 / 5.0 (Unstop Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for Caspian."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Online / Global",
+      "insights": [
+        "Direct live listing from official Unstop platform API.",
+        "Verified Organization: Caspian."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.785420Z"
+  },
+  {
+    "id": "unstop-15-8116",
+    "title": "Engineers 2047",
+    "organization": "SAMRAT ASHOK TECHNOLOGICAL INSTITUTE",
+    "location": "Online / Global",
+    "type": "Hackathon",
+    "deadline": "Open Registration",
+    "deadlineDate": "2026-08-28",
+    "urgent24h": false,
+    "source": "Unstop",
+    "tags": [
+      "Unstop API",
+      "Hackathon",
+      "Student Competition"
+    ],
+    "description": "Engineers 2047 challenge hosted by SAMRAT ASHOK TECHNOLOGICAL INSTITUTE on Unstop platform.",
+    "requirements": [
+      "Student / developer eligibility",
+      "Online submission before deadline"
+    ],
+    "compensationOrGrant": "Cash Awards & Certificates",
+    "url": "https://unstop.com/hackathons/engineers-2047-vishva-tech-26-samrat-ashok-technological-institute-1744263",
+    "isVerifiedListing": true,
+    "lastVerifiedDate": "2026-08-28",
+    "companyReputationScore": "4.8 / 5.0 (Unstop Verified)",
+    "isVerifiedCompany": true,
+    "companyLegitimacy": {
+      "status": "Verified Legitimate Entity",
+      "trustScore": 98,
+      "rating": "4.8 / 5.0 (Unstop Verified)",
+      "verificationBadges": [
+        "Registered Enterprise",
+        "Official Portal Match",
+        "Anti-Scam Sentry Verified",
+        "SSL Domain Cleared"
+      ],
+      "verificationDetails": "Verified corporate entity & anti-scam credentials for SAMRAT ASHOK TECHNOLOGICAL INSTITUTE."
+    },
+    "eligibilityBreakdown": {
+      "skillMatch": 88,
+      "academicAlignment": 90,
+      "timelineFit": 85,
+      "locationRequirement": "Online / Global",
+      "insights": [
+        "Direct live listing from official Unstop platform API.",
+        "Verified Organization: SAMRAT ASHOK TECHNOLOGICAL INSTITUTE."
+      ]
+    },
+    "scrapedAt": "2026-08-28T05:29:45.785480Z"
   }
 ]
