@@ -4,7 +4,7 @@
 # Setup:
 #   1. gcloud auth login
 #   2. gcloud config set project YOUR_PROJECT_ID
-#   3. gcloud builds submit --config cloudbuild.yaml ./backend
+#   3. gcloud builds submit --config cloudbuild.yaml .
 #
 # Or trigger automatically via Cloud Build GitHub integration.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -44,11 +44,13 @@ steps:
       - "--platform=managed"
       - "--allow-unauthenticated"
       - "--port=8080"
-      - "--memory=512Mi"
+      - "--memory=1Gi"
       - "--cpu=1"
+      - "--concurrency=80"
+      - "--timeout=300s"
       - "--min-instances=0"
       - "--max-instances=10"
-      - "--set-env-vars=ENVIRONMENT=production"
+      - "--set-env-vars=ENVIRONMENT=production,LOG_FORMAT=json"
       - "--update-secrets=GEMINI_API_KEY=nextlane-gemini-key:latest,JWT_SECRET=nextlane-jwt-secret:latest,EMAIL_USER=nextlane-email-user:latest,EMAIL_PASS=nextlane-email-pass:latest"
 
 images:

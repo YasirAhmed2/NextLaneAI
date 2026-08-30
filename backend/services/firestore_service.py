@@ -2,10 +2,11 @@ import os
 import json
 from typing import List, Dict, Any, Optional
 from utils.logger import log_event, log_error
+from config import settings
 
-# In-memory and local cache storage fallback
-DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
-SEED_FILE = os.path.join(DATA_DIR, "seed_opportunities.json")
+# Data directory: ./data locally, /tmp/data on Cloud Run
+DATA_DIR = settings.data_dir
+SEED_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "seed_opportunities.json")
 STORE_FILE = os.path.join(DATA_DIR, "opportunities_store.json")
 
 class FirestoreService:

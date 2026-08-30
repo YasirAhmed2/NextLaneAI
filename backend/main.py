@@ -2,29 +2,42 @@ import os
 import asyncio
 from contextlib import asynccontextmanager
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from dotenv import load_dotenv
+import time
 
-# Load environment variables
+# Load environment variables (no-op in production where env vars are injected)
 load_dotenv()
 
-from utils.logger import log_event, log_agent_step
+from config import settings
+from utils.logger import (
+    log_event, log_agent_step, logger,
+    set_request_id, generate_request_id, get_request_id,
+)
 from routes.match import router as match_router
 from routes.agent import router as agent_router, _agent_state
 from services.firestore_service import firestore_service
 from services.scraping_service import scraping_service
 
-# ── APScheduler — Autonomous 30-minute agent cycles ──────────────────────────
-try:
-    from apscheduler.schedulers.asyncio import AsyncIOScheduler
-    from apscheduler.triggers.interval import IntervalTrigger
-    _scheduler_available = True
-except ImportError:
-    _scheduler_available = False
-    log_event("scheduler", "APScheduler not installed — autonomous cycles disabled. Run: pip install apscheduler")
+# ── APScheduler — Autonomous agent cycles (disabled in Cloud Run production) ──
+_scheduler_available = False
+scheduler = None
 
-scheduler = AsyncIOScheduler() if _scheduler_available else None
+if not settings.is_production and not os.getenv("K_SERVICE"):
+    # Only use in-process scheduler for local development
+    try:
+        from apscheduler.schedulers.asyncio import AsyncIOScheduler
+        from apscheduler.triggers.interval import IntervalTrigger
+        _scheduler_available = True
+        scheduler = AsyncIOScheduler()
+    except ImportError:
+        log_event("scheduler", "APScheduler not installed — autonomous cycles disabled. Run: pip install apscheduler")
+else:
+    log_event("scheduler", "Production mode — use Google Cloud Scheduler instead of in-process APScheduler")
 
 
 async def periodic_agent_cycle():
@@ -102,7 +115,7 @@ async def lifespan(app: FastAPI):
     total = len(firestore_service.get_all_opportunities())
     log_agent_step("startup_complete", f"NextLane AI online — {total} indexed opportunities ready")
 
-    # ── Start Autonomous Scheduler ────────────────────────────────────────────
+    # ── Start Autonomous Scheduler (local dev only) ───────────────────────────
     if scheduler and _scheduler_available:
         scheduler.add_job(
             periodic_agent_cycle,
@@ -120,8 +133,8 @@ async def lifespan(app: FastAPI):
         )
     else:
         log_agent_step(
-            "scheduler_unavailable",
-            "APScheduler not available — install with: pip install apscheduler"
+            "scheduler_info",
+            "In-process scheduler disabled — use Cloud Scheduler for production autonomous cycles"
         )
 
     yield  # Application runs here
@@ -146,12 +159,92 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+
+# ── Global Exception Handlers ────────────────────────────────────────────────
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    """Return clean JSON for all HTTP errors."""
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error": True,
+            "status_code": exc.status_code,
+            "detail": exc.detail,
+            "request_id": get_request_id(),
+        },
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """Return clean JSON for validation errors with field-level details."""
+    return JSONResponse(
+        status_code=422,
+        content={
+            "error": True,
+            "status_code": 422,
+            "detail": "Request validation failed",
+            "errors": [
+                {
+                    "field": ".".join(str(loc) for loc in err.get("loc", [])),
+                    "message": err.get("msg", ""),
+                    "type": err.get("type", ""),
+                }
+                for err in exc.errors()
+            ],
+            "request_id": get_request_id(),
+        },
+    )
+
+
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    """Catch-all: never return HTML error pages."""
+    from utils.logger import log_error
+    log_error("unhandled_exception", exc)
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": True,
+            "status_code": 500,
+            "detail": "Internal server error",
+            "request_id": get_request_id(),
+        },
+    )
+
+
+# ── Request Middleware ────────────────────────────────────────────────────────
+
+@app.middleware("http")
+async def request_context_middleware(request: Request, call_next):
+    """Adds request ID, logs request/response, and measures duration."""
+    request_id = request.headers.get("X-Request-ID") or generate_request_id()
+    set_request_id(request_id)
+
+    start_time = time.monotonic()
+    method = request.method
+    path = request.url.path
+
+    try:
+        response = await call_next(request)
+    except Exception as e:
+        duration_ms = int((time.monotonic() - start_time) * 1000)
+        logger.error(f"[HTTP] {method} {path} -> 500 ({duration_ms}ms) — {str(e)}")
+        raise
+
+    duration_ms = int((time.monotonic() - start_time) * 1000)
+    response.headers["X-Request-ID"] = request_id
+
+    # Log request (skip health checks to reduce noise)
+    if path not in ("/health", "/api/health"):
+        logger.info(f"[HTTP] {method} {path} -> {response.status_code} ({duration_ms}ms)")
+
+    return response
+
+
 # ── CORS ──────────────────────────────────────────────────────────────────────
-allowed_origins_env = os.getenv(
-    "ALLOWED_ORIGINS",
-    "http://localhost:5000,http://localhost:3000,http://127.0.0.1:5000,http://127.0.0.1:3000"
-)
-allowed_origins = [orig.strip() for orig in allowed_origins_env.split(",") if orig.strip()]
+allowed_origins = settings.cors_origins
 
 app.add_middleware(
     CORSMiddleware,
@@ -175,7 +268,7 @@ def root():
         "service": "NextLane AI — Autonomous Opportunity Gap Agent",
         "version": "2.0.0",
         "sdk": "google-genai",
-        "model": os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
+        "model": settings.GEMINI_MODEL,
         "status": "online",
         "autonomous": True,
         "schedulerActive": scheduler.running if scheduler else False,
@@ -207,14 +300,15 @@ def health():
         "service": "nextlane-ai-backend",
         "version": "2.0.0",
         "sdk": "google-genai",
-        "model": os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
+        "model": settings.GEMINI_MODEL,
         "autonomous": True,
         "schedulerRunning": scheduler.running if scheduler else False,
     }
 
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))
-    host = os.getenv("HOST", "0.0.0.0")
-    log_event("server", f"Starting server on http://{host}:{port}")
-    uvicorn.run("main:app", host=host, port=port, reload=True)
+    port = settings.PORT
+    host = settings.HOST
+    is_dev = not settings.is_production
+    log_event("server", f"Starting server on http://{host}:{port} (reload={'on' if is_dev else 'off'})")
+    uvicorn.run("main:app", host=host, port=port, reload=is_dev)

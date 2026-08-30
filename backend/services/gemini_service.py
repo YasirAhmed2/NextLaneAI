@@ -11,6 +11,7 @@ import json
 import asyncio
 from typing import Dict, Any, List, Optional
 from utils.logger import log_event, log_error, log_agent_step
+from config import settings
 
 # ── SDK import (google-genai, NOT google-generativeai) ──────────────────────
 try:
@@ -29,8 +30,8 @@ SUPPORTED_MODELS = ["gemini-3.6-flash", "gemini-2.0-flash", "gemini-1.5-flash"]
 
 class GeminiService:
     def __init__(self):
-        self.api_key: Optional[str] = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
-        self.model_name: str = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
+        self.api_key: Optional[str] = settings.GEMINI_API_KEY or os.getenv("GOOGLE_API_KEY", "")
+        self.model_name: str = settings.GEMINI_MODEL
         self.client: Optional[Any] = None
         self.initialized: bool = False
         self._init_client()
@@ -133,6 +134,14 @@ Return STRICT JSON only (no markdown, no explanation):
         # Heuristic fallback plan
         return self._heuristic_plan(user_interests)
 
+    async def generate_agent_plan_async(self, user_profile: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Async wrapper for generate_agent_plan — runs the blocking SDK call
+        in a thread pool executor so the event loop stays free.
+        """
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, self.generate_agent_plan, user_profile)
+
     def _heuristic_plan(self, interests: List[str]) -> Dict[str, Any]:
         """Deterministic plan when Gemini is unavailable."""
         interests_lower = [i.lower() for i in interests]
@@ -161,18 +170,17 @@ Return STRICT JSON only (no markdown, no explanation):
 
     def generate_match_reasoning(self, user_profile: Dict[str, Any], opportunity: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Synchronous match reasoning — calls async version via asyncio.
+        Synchronous match reasoning — calls async version via thread pool.
+        Prefer generate_match_reasoning_async() in async contexts.
         """
         try:
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                # In async context, create a task (caller should use async version)
-                import concurrent.futures
-                with concurrent.futures.ThreadPoolExecutor() as pool:
-                    future = pool.submit(asyncio.run, self.generate_match_reasoning_async(user_profile, opportunity))
-                    return future.result(timeout=15)
-            else:
-                return loop.run_until_complete(self.generate_match_reasoning_async(user_profile, opportunity))
+            import concurrent.futures
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+                future = pool.submit(
+                    asyncio.run,
+                    self.generate_match_reasoning_async(user_profile, opportunity)
+                )
+                return future.result(timeout=20)
         except Exception:
             return self._heuristic_match(user_profile, opportunity)
 

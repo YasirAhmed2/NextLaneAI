@@ -128,3 +128,104 @@ def fetch_with_retry(
             max_retries, url, str(last_exception)
         )
     return None
+
+
+# ── Async variant using aiohttp ──────────────────────────────────────────────
+
+async def fetch_with_retry_async(
+    url: str,
+    headers: Optional[Dict[str, str]] = None,
+    timeout: int = 10,
+    max_retries: int = 3,
+    backoff_base: float = 1.5,
+) -> Optional[Dict[str, Any]]:
+    """
+    Async HTTP GET with exponential backoff retry using aiohttp.
+    Returns parsed JSON dict on success, None on failure.
+
+    This is a truly non-blocking alternative to fetch_with_retry()
+    for use in async contexts.
+    """
+    import asyncio
+
+    try:
+        import aiohttp
+    except ImportError:
+        logger.warning("[RETRY] aiohttp not installed — falling back to sync fetch in executor")
+        loop = asyncio.get_event_loop()
+        response = await loop.run_in_executor(
+            None, lambda: fetch_with_retry(url, headers=headers, timeout=timeout, max_retries=max_retries)
+        )
+        if response and response.status_code == 200:
+            try:
+                return response.json()
+            except Exception:
+                return None
+        return None
+
+    attempt = 0
+    last_exception: Optional[Exception] = None
+
+    async with aiohttp.ClientSession() as session:
+        while attempt < max_retries:
+            wait_secs = backoff_base ** attempt
+
+            try:
+                async with session.get(
+                    url,
+                    headers=headers,
+                    timeout=aiohttp.ClientTimeout(total=timeout),
+                ) as response:
+                    if response.status == 200:
+                        return await response.json()
+
+                    if response.status == 429:
+                        retry_after = int(response.headers.get("Retry-After", wait_secs * 2))
+                        logger.warning(
+                            "[RETRY-ASYNC] 429 at %s — waiting %ds (attempt %d/%d)",
+                            url, retry_after, attempt + 1, max_retries
+                        )
+                        await asyncio.sleep(retry_after)
+                        attempt += 1
+                        continue
+
+                    if response.status in (500, 502, 503, 504):
+                        logger.warning(
+                            "[RETRY-ASYNC] %d at %s — backoff %.1fs (attempt %d/%d)",
+                            response.status, url, wait_secs, attempt + 1, max_retries
+                        )
+                        await asyncio.sleep(wait_secs)
+                        attempt += 1
+                        continue
+
+                    if 400 <= response.status < 500:
+                        logger.warning("[RETRY-ASYNC] %d client error at %s — not retrying", response.status, url)
+                        return None
+
+                    await asyncio.sleep(wait_secs)
+                    attempt += 1
+
+            except asyncio.TimeoutError:
+                logger.warning(
+                    "[RETRY-ASYNC] Timeout at %s — backoff %.1fs (attempt %d/%d)",
+                    url, wait_secs, attempt + 1, max_retries
+                )
+                await asyncio.sleep(wait_secs)
+                attempt += 1
+                last_exception = TimeoutError(f"Timeout after {timeout}s: {url}")
+
+            except aiohttp.ClientError as e:
+                logger.warning(
+                    "[RETRY-ASYNC] Client error at %s — backoff %.1fs (attempt %d/%d): %s",
+                    url, wait_secs, attempt + 1, max_retries, str(e)
+                )
+                await asyncio.sleep(wait_secs)
+                attempt += 1
+                last_exception = e
+
+    if last_exception:
+        logger.error(
+            "[RETRY-ASYNC] All %d attempts exhausted for %s. Last error: %s",
+            max_retries, url, str(last_exception)
+        )
+    return None

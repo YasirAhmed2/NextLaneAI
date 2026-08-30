@@ -23,20 +23,36 @@ from bs4 import BeautifulSoup
 from typing import List, Dict, Any, Callable
 from utils.logger import log_event, log_error, log_agent_step, log_tool_call
 from utils.retry import fetch_with_retry
+import random
 
-USER_AGENT = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-    "AppleWebKit/537.36 (KHTML, like Gecko) "
-    "Chrome/124.0.0.0 Safari/537.36"
-)
-DEFAULT_HEADERS = {
-    "User-Agent": USER_AGENT,
-    "Accept": "application/json, text/html, */*",
-    "Accept-Language": "en-US,en;q=0.9",
-}
+# User-Agent rotation pool for scraping resilience
+_USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3 Safari/605.1.15",
+]
+
+
+def _get_headers() -> Dict[str, str]:
+    """Returns request headers with a randomly selected User-Agent."""
+    return {
+        "User-Agent": random.choice(_USER_AGENTS),
+        "Accept": "application/json, text/html, */*",
+        "Accept-Language": "en-US,en;q=0.9",
+    }
+
+
+USER_AGENT = _USER_AGENTS[0]  # Backward compat reference
+DEFAULT_HEADERS = _get_headers()
 
 MAX_RESULTS_PER_SCRAPER = 15
-TODAY = datetime.date.today().isoformat()
+
+
+def _today() -> str:
+    """Returns today's date as ISO string. Called at runtime, never stale."""
+    return datetime.date.today().isoformat()
 
 
 def _make_id(prefix: str, title: str, idx: int) -> str:
@@ -112,7 +128,7 @@ class ScrapingService:
             "location": location or "Remote / Worldwide",
             "type": opp_type,
             "deadline": deadline or "Open Intake",
-            "deadlineDate": deadline_date or TODAY,
+            "deadlineDate": deadline_date or _today(),
             "urgent24h": urgent_24h,
             "source": source,
             "tags": [t for t in tags if t][:5] if tags else [opp_type, source],
@@ -121,7 +137,7 @@ class ScrapingService:
             "compensationOrGrant": compensation or "Competitive Package / Prize Award",
             "url": clean_url,
             "isVerifiedListing": True,
-            "lastVerifiedDate": TODAY,
+            "lastVerifiedDate": _today(),
             "companyReputationScore": company_reputation,
             "isVerifiedCompany": is_verified_company,
             "companyLegitimacy": company_legitimacy,
@@ -144,7 +160,7 @@ class ScrapingService:
         results = []
         try:
             api_url = "https://devpost.com/api/hackathons"
-            res = fetch_with_retry(api_url, headers=DEFAULT_HEADERS, timeout=self.timeout)
+            res = fetch_with_retry(api_url, headers=_get_headers(), timeout=self.timeout)
             if res and res.status_code == 200:
                 data = res.json()
                 hackathons = data.get("hackathons", [])
@@ -167,8 +183,7 @@ class ScrapingService:
         except Exception as e:
             log_error("scrape_devpost", e)
 
-        print(f"[Scraper] fetched {len(results)} opportunities from Devpost")
-        log_event("Scraper", f"[Scraper] fetched {len(results)} opportunities from Devpost")
+        log_event("Scraper", f"fetched {len(results)} opportunities from Devpost")
         log_tool_call("scrape_devpost", len(results))
         return results
 
@@ -178,7 +193,7 @@ class ScrapingService:
         results = []
         try:
             api_url = "https://remotive.com/api/remote-jobs?category=software-dev&limit=20"
-            res = fetch_with_retry(api_url, headers=DEFAULT_HEADERS, timeout=self.timeout)
+            res = fetch_with_retry(api_url, headers=_get_headers(), timeout=self.timeout)
             if res and res.status_code == 200:
                 jobs = res.json().get("jobs", [])
                 for idx, job in enumerate(jobs[:MAX_RESULTS_PER_SCRAPER]):
@@ -201,8 +216,7 @@ class ScrapingService:
         except Exception as e:
             log_error("scrape_remotive", e)
 
-        print(f"[Scraper] fetched {len(results)} opportunities from Remotive")
-        log_event("Scraper", f"[Scraper] fetched {len(results)} opportunities from Remotive")
+        log_event("Scraper", f"fetched {len(results)} opportunities from Remotive")
         log_tool_call("scrape_remotive", len(results))
         return results
 
@@ -212,7 +226,7 @@ class ScrapingService:
         results = []
         try:
             api_url = "https://unstop.com/api/public/opportunity/search-result?opportunity=hackathons&per_page=15&oppstatus=open"
-            res = fetch_with_retry(api_url, headers={**DEFAULT_HEADERS, "Referer": "https://unstop.com/"}, timeout=self.timeout)
+            res = fetch_with_retry(api_url, headers={**_get_headers(), "Referer": "https://unstop.com/"}, timeout=self.timeout)
             if res and res.status_code == 200:
                 data = res.json()
                 items = data.get("data", {}).get("data", []) or []
@@ -236,8 +250,7 @@ class ScrapingService:
         except Exception as e:
             log_error("scrape_unstop", e)
 
-        print(f"[Scraper] fetched {len(results)} opportunities from Unstop")
-        log_event("Scraper", f"[Scraper] fetched {len(results)} opportunities from Unstop")
+        log_event("Scraper", f"fetched {len(results)} opportunities from Unstop")
         log_tool_call("scrape_unstop", len(results))
         return results
 
@@ -247,7 +260,7 @@ class ScrapingService:
         results = []
         try:
             api_url = "https://remoteok.com/api"
-            res = fetch_with_retry(api_url, headers=DEFAULT_HEADERS, timeout=self.timeout)
+            res = fetch_with_retry(api_url, headers=_get_headers(), timeout=self.timeout)
             if res and res.status_code == 200:
                 jobs = [j for j in res.json() if isinstance(j, dict) and j.get("position")][:MAX_RESULTS_PER_SCRAPER]
                 for idx, job in enumerate(jobs):
@@ -271,8 +284,7 @@ class ScrapingService:
         except Exception as e:
             log_error("scrape_remoteok_jobs", e)
 
-        print(f"[Scraper] fetched {len(results)} opportunities from RemoteOK")
-        log_event("Scraper", f"[Scraper] fetched {len(results)} opportunities from RemoteOK")
+        log_event("Scraper", f"fetched {len(results)} opportunities from RemoteOK")
         log_tool_call("scrape_remoteok_jobs", len(results))
         return results
 
@@ -282,7 +294,7 @@ class ScrapingService:
         results = []
         try:
             api_url = "https://www.arbeitnow.com/api/job-board-api"
-            res = fetch_with_retry(api_url, headers=DEFAULT_HEADERS, timeout=self.timeout)
+            res = fetch_with_retry(api_url, headers=_get_headers(), timeout=self.timeout)
             if res and res.status_code == 200:
                 jobs = res.json().get("data", [])[:MAX_RESULTS_PER_SCRAPER]
                 for idx, job in enumerate(jobs):
@@ -305,8 +317,7 @@ class ScrapingService:
         except Exception as e:
             log_error("scrape_arbeitnow", e)
 
-        print(f"[Scraper] fetched {len(results)} opportunities from ArbeitNow")
-        log_event("Scraper", f"[Scraper] fetched {len(results)} opportunities from ArbeitNow")
+        log_event("Scraper", f"fetched {len(results)} opportunities from ArbeitNow")
         log_tool_call("scrape_arbeitnow", len(results))
         return results
 
@@ -316,7 +327,7 @@ class ScrapingService:
         results = []
         try:
             api_url = "https://jobicy.com/api/v2/remote-jobs?count=20"
-            res = fetch_with_retry(api_url, headers=DEFAULT_HEADERS, timeout=self.timeout)
+            res = fetch_with_retry(api_url, headers=_get_headers(), timeout=self.timeout)
             if res and res.status_code == 200:
                 jobs = res.json().get("jobs", [])[:MAX_RESULTS_PER_SCRAPER]
                 for idx, job in enumerate(jobs):
@@ -338,8 +349,7 @@ class ScrapingService:
         except Exception as e:
             log_error("scrape_jobicy", e)
 
-        print(f"[Scraper] fetched {len(results)} opportunities from Jobicy")
-        log_event("Scraper", f"[Scraper] fetched {len(results)} opportunities from Jobicy")
+        log_event("Scraper", f"fetched {len(results)} opportunities from Jobicy")
         log_tool_call("scrape_jobicy", len(results))
         return results
 
@@ -349,7 +359,7 @@ class ScrapingService:
         results = []
         try:
             api_url = "https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/?keywords=software+engineer&location=Worldwide&start=0"
-            res = fetch_with_retry(api_url, headers={**DEFAULT_HEADERS, "Referer": "https://www.linkedin.com/jobs/"}, timeout=self.timeout)
+            res = fetch_with_retry(api_url, headers={**_get_headers(), "Referer": "https://www.linkedin.com/jobs/"}, timeout=self.timeout)
             if res and res.status_code == 200:
                 soup = BeautifulSoup(res.text, "html.parser")
                 cards = soup.select("li, .base-card, .job-search-card")
@@ -376,8 +386,7 @@ class ScrapingService:
         except Exception as e:
             log_error("scrape_linkedin_jobs", e)
 
-        print(f"[Scraper] fetched {len(results)} opportunities from LinkedIn")
-        log_event("Scraper", f"[Scraper] fetched {len(results)} opportunities from LinkedIn")
+        log_event("Scraper", f"fetched {len(results)} opportunities from LinkedIn")
         log_tool_call("scrape_linkedin_jobs", len(results))
         return results
 
@@ -387,7 +396,7 @@ class ScrapingService:
         results = []
         try:
             url = "https://mlh.io/seasons/2026/events"
-            res = fetch_with_retry(url, headers=DEFAULT_HEADERS, timeout=self.timeout)
+            res = fetch_with_retry(url, headers=_get_headers(), timeout=self.timeout)
             if res and res.status_code == 200:
                 soup = BeautifulSoup(res.text, "html.parser")
                 events = soup.select(".event, .event-wrapper, [class*='event-card']")
@@ -411,8 +420,7 @@ class ScrapingService:
         except Exception as e:
             log_error("scrape_mlh", e)
 
-        print(f"[Scraper] fetched {len(results)} opportunities from MLH")
-        log_event("Scraper", f"[Scraper] fetched {len(results)} opportunities from MLH")
+        log_event("Scraper", f"fetched {len(results)} opportunities from MLH")
         log_tool_call("scrape_mlh", len(results))
         return results
 
@@ -424,7 +432,7 @@ class ScrapingService:
             search_queries = ["software+engineer", "full+stack", "ai+developer"]
             for q in search_queries:
                 api_url = f"https://www.indeed.com/jobs?q={q}&l=Remote"
-                res = fetch_with_retry(api_url, headers=DEFAULT_HEADERS, timeout=self.timeout)
+                res = fetch_with_retry(api_url, headers=_get_headers(), timeout=self.timeout)
                 if res and res.status_code == 200:
                     soup = BeautifulSoup(res.text, "html.parser")
                     job_cards = soup.select(".job_seen_beacon, .result, [class*='jobCard'], td.resultContent")
@@ -460,8 +468,7 @@ class ScrapingService:
         except Exception as e:
             log_error("scrape_indeed_jobs", e)
 
-        print(f"[Scraper] fetched {len(results)} opportunities from Indeed")
-        log_event("Scraper", f"[Scraper] fetched {len(results)} opportunities from Indeed")
+        log_event("Scraper", f"fetched {len(results)} opportunities from Indeed")
         log_tool_call("scrape_indeed_jobs", len(results))
         return results
 

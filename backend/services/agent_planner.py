@@ -145,5 +145,22 @@ Formulate a strategic execution plan. Produce a JSON object with:
                 "isGoalDriven": True,
             }
 
+    async def generate_goal_driven_plan_async(
+        self,
+        user_profile: Dict[str, Any],
+        goal: str,
+        available_tools: Optional[List[str]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Async wrapper — runs the blocking Gemini SDK call in a thread pool
+        so the event loop stays free.
+        """
+        import asyncio
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(
+            None,
+            lambda: self.generate_goal_driven_plan(user_profile, goal, available_tools)
+        )
+
 
 agent_planner = AgentPlanner()

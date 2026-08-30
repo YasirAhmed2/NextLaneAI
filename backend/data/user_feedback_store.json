@@ -7,5 +7,14 @@
     "opportunityType": "Scholarship",
     "feedbackText": "Great opportunity",
     "timestamp": "2026-08-26T18:15:40.569442Z"
+  },
+  {
+    "id": "fb-20260830185713-2610",
+    "userId": "usr_test123",
+    "opportunityId": "opp-123",
+    "action": "save",
+    "opportunityType": "Scholarship",
+    "feedbackText": "Great opportunity",
+    "timestamp": "2026-08-30T18:57:13.493731Z"
   }
 ]

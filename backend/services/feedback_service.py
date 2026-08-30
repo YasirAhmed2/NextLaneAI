@@ -13,10 +13,11 @@ import datetime
 import logging
 from typing import Dict, Any, List, Optional
 from utils.logger import log_event, log_error
+from config import settings
 
 logger = logging.getLogger("nextlane_ai")
 
-DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
+DATA_DIR = settings.data_dir
 FEEDBACK_FILE = os.path.join(DATA_DIR, "user_feedback_store.json")
 
 

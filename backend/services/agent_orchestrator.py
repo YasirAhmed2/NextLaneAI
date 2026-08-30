@@ -96,10 +96,10 @@ class AgentOrchestrator:
         plan_start = time.monotonic()
         if goal:
             _log("Planner Agent", "planning_goal_driven", f"Generating strategic plan for goal: '{goal}'")
-            plan = agent_planner.generate_goal_driven_plan(user_profile, goal, list(TOOL_REGISTRY.keys()))
+            plan = await agent_planner.generate_goal_driven_plan_async(user_profile, goal, list(TOOL_REGISTRY.keys()))
         else:
             _log("Planner Agent", "planning_baseline", "Gemini generating execution plan...")
-            plan = gemini_service.generate_agent_plan(user_profile)
+            plan = await gemini_service.generate_agent_plan_async(user_profile)
 
         log_plan(plan)
         timing["planning_ms"] = round((time.monotonic() - plan_start) * 1000)
@@ -290,22 +290,71 @@ def requests_quote(text: str) -> str:
         return text.replace(" ", "+")
 
 
+async def run_agent_async(
+    user_profile: Dict[str, Any],
+    force_rescrape: bool = False,
+    context: str = "manual",
+    goal: Optional[str] = None,
+) -> Dict[str, Any]:
+    """
+    Safe async agent runner — use this from async contexts (FastAPI endpoints,
+    background tasks). Does NOT call asyncio.run() which is illegal inside
+    a running event loop.
+    """
+    orchestrator = AgentOrchestrator()
+    try:
+        return await orchestrator.execute_agent(
+            user_profile,
+            force_rescrape=force_rescrape,
+            context=context,
+            goal=goal,
+        )
+    except Exception as e:
+        log_error("agent_run_async", e)
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": datetime.datetime.utcnow().isoformat() + "Z"
+        }
+
+
 def run_agent_sync(
     user_profile: Dict[str, Any],
     force_rescrape: bool = False,
     context: str = "manual",
     goal: Optional[str] = None,
 ) -> Dict[str, Any]:
+    """
+    Sync wrapper — only safe to call from threads that do NOT have a running
+    event loop (e.g. plain scripts, tests). For FastAPI/uvicorn contexts,
+    use run_agent_async() instead.
+    """
+    import concurrent.futures
     orchestrator = AgentOrchestrator()
     try:
-        return asyncio.run(
-            orchestrator.execute_agent(
-                user_profile,
-                force_rescrape=force_rescrape,
-                context=context,
-                goal=goal,
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            # Inside a running loop (uvicorn) — run in a separate thread
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+                future = pool.submit(
+                    asyncio.run,
+                    orchestrator.execute_agent(
+                        user_profile,
+                        force_rescrape=force_rescrape,
+                        context=context,
+                        goal=goal,
+                    )
+                )
+                return future.result(timeout=300)
+        else:
+            return loop.run_until_complete(
+                orchestrator.execute_agent(
+                    user_profile,
+                    force_rescrape=force_rescrape,
+                    context=context,
+                    goal=goal,
+                )
             )
-        )
     except Exception as e:
         log_error("agent_run_sync", e)
         return {

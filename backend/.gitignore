@@ -1,8 +1,46 @@
+# Environment variables & secrets
 .env
 *.env
+*.env.*
+*.json
+!data/seed_opportunities.json
+
+# Python cache & build artifacts
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing & linting
 .pytest_cache/
 .mypy_cache/
+.coverage
+htmlcov/
+
+# Local data cache
+data/opportunities_store.json
+data/user_feedback_store.json

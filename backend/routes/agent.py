@@ -25,7 +25,7 @@ from models.schemas import (
     AnalyzeMissedRequest,
     UserFeedbackRequest,
 )
-from services.agent_orchestrator import run_agent_sync, agent_orchestrator
+from services.agent_orchestrator import run_agent_sync, run_agent_async, agent_orchestrator
 from services.gemini_service import gemini_service
 from services.firestore_service import firestore_service
 from services.notification_service import notification_service
@@ -144,7 +144,7 @@ async def get_agent_plan(profile: UserProfileRequest) -> Dict[str, Any]:
             "interests": profile.get_effective_interests(),
         }
         log_agent_step("plan_request", f"user='{user_dict['name']}'")
-        plan = gemini_service.generate_agent_plan(user_dict)
+        plan = await gemini_service.generate_agent_plan_async(user_dict)
         return {
             "status": "plan_generated",
             "user": user_dict["name"],
@@ -320,7 +320,7 @@ async def tailor_cv_endpoint(payload: TailorCvRequest) -> Dict[str, Any]:
     """
     try:
         log_agent_step("cv_tailor_request", f"Target: {payload.opportunityTitle} at {payload.organization}")
-        result = assistant_service.tailor_cv(
+        result = await assistant_service.tailor_cv_async(
             cv_text=payload.cvText,
             opportunity_title=payload.opportunityTitle,
             organization=payload.organization,
@@ -345,7 +345,7 @@ async def generate_letter_endpoint(payload: LetterGeneratorRequest) -> Dict[str,
     """
     try:
         log_agent_step("letter_generator_request", f"Type: {payload.letterType} for {payload.scholarshipTitle}")
-        result = assistant_service.generate_letter(
+        result = await assistant_service.generate_letter_async(
             letter_type=payload.letterType,
             scholarship_title=payload.scholarshipTitle,
             organization=payload.organization,
@@ -392,11 +392,11 @@ async def run_agent_with_goal_endpoint(
     _agent_state["status"] = "running (goal_driven)"
     _agent_state["last_run"] = datetime.datetime.utcnow().isoformat() + "Z"
 
-    def _bg_task():
+    async def _bg_task():
         global _agent_state
         try:
             log_agent_step("goal_driven_bg_start", f"goal='{goal[:50]}' user='{user_dict.get('name')}'")
-            result = run_agent_sync(user_dict, force_rescrape=force_rescrape, context="goal_driven", goal=goal)
+            result = await run_agent_async(user_dict, force_rescrape=force_rescrape, context="goal_driven", goal=goal)
             _agent_state["status"] = "idle"
             _agent_state["last_result"] = {
                 "goal": goal,

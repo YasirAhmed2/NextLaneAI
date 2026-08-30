@@ -155,5 +155,19 @@ The motivation letter must:
                 "letterContent": f"To the Selection Committee,\n\nI am writing to express my strong endorsement for {username} regarding the {scholarship_title} at {organization}. {username} has consistently demonstrated exceptional technical proficiency in {', '.join(skills[:3]) if skills else 'computer science'} and outstanding academic commitment.\n\nSincerely,\nAcademic Advisory Board",
             }
 
+    # ── Async wrappers (for FastAPI async endpoints) ──────────────────────────
+
+    async def tailor_cv_async(self, **kwargs) -> Dict[str, Any]:
+        """Async wrapper — runs blocking Gemini call in thread pool."""
+        import asyncio
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, lambda: self.tailor_cv(**kwargs))
+
+    async def generate_letter_async(self, **kwargs) -> Dict[str, Any]:
+        """Async wrapper — runs blocking Gemini call in thread pool."""
+        import asyncio
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, lambda: self.generate_letter(**kwargs))
+
 
 assistant_service = AssistantService()
