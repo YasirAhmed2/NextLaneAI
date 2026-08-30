@@ -15,6 +15,8 @@ export interface AgentLogEntry {
   status: 'info' | 'success' | 'warning' | 'active';
 }
 
+export type OpportunityType = 'Hackathon' | 'Internship' | 'Scholarship' | 'Fellowship' | 'Job' | string;
+
 export interface Opportunity {
   id: string;
   title: string;
@@ -44,6 +46,11 @@ export interface Opportunity {
   intakeSeason?: string;
   historicalReason?: string;
   estimatedNextCycle?: string;
+  urgent24h?: boolean;
+  remainingHours?: number;
+  cgpaRequirement?: string;
+  ieltsRequirement?: string;
+  experienceRequired?: string;
   eligibilityBreakdown?: {
     skillMatch: number;
     academicAlignment: number;

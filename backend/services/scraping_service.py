@@ -98,6 +98,13 @@ class ScrapingService:
             "verificationDetails": f"Verified corporate entity & anti-scam credentials for {clean_org}."
         }
 
+        clean_reqs = [r for r in requirements if r]
+        # For non-scholarship categories (Hackathons, Jobs, Internships), filter out IELTS, CGPA, etc.
+        is_scholarship = any(k in opp_type.lower() for k in ["scholarship", "fellowship", "grant"])
+        if not is_scholarship:
+            academic_terms = ["ielts", "cgpa", "toefl", "gpa requirement", "min gpa", "gre score"]
+            clean_reqs = [r for r in clean_reqs if not any(term in r.lower() for term in academic_terms)]
+
         return {
             "id": _make_id(prefix, clean_title, idx),
             "title": clean_title,
@@ -110,7 +117,7 @@ class ScrapingService:
             "source": source,
             "tags": [t for t in tags if t][:5] if tags else [opp_type, source],
             "description": clean_desc,
-            "requirements": [r for r in requirements if r] or ["Open to developers & qualified candidates", "Demonstrated domain interest"],
+            "requirements": clean_reqs or ["Open to developers & qualified candidates", "Demonstrated domain interest"],
             "compensationOrGrant": compensation or "Competitive Package / Prize Award",
             "url": clean_url,
             "isVerifiedListing": True,
