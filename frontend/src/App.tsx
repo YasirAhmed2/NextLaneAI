@@ -135,11 +135,38 @@ export default function App() {
     localStorage.setItem('nextlane_opportunities', JSON.stringify(opportunities));
   }, [opportunities]);
 
-  // Auto-fetch live opportunities on mount if feed is empty
+  // Auto-fetch live opportunities on mount from backend agent
   useEffect(() => {
-    if (opportunities.length === 0) {
-      handleRefreshAgent();
-    }
+    const fetchLiveCatalog = async () => {
+      try {
+        const liveOpps = await opportraService.getAllOpportunities();
+        if (Array.isArray(liveOpps) && liveOpps.length > 0) {
+          const savedIds = new Set<string>();
+          try {
+            const stored = localStorage.getItem('nextlane_opportunities');
+            if (stored) {
+              const parsed = JSON.parse(stored);
+              if (Array.isArray(parsed)) {
+                parsed.filter((item: Opportunity) => item.isSaved).forEach((item: Opportunity) => savedIds.add(item.id));
+              }
+            }
+          } catch {
+            // ignore
+          }
+
+          setOpportunities(
+            liveOpps.map((o) => ({
+              ...o,
+              isSaved: savedIds.has(o.id) || Boolean(o.isSaved),
+            }))
+          );
+        }
+      } catch (err) {
+        console.warn('Initial live opportunities fetch failed, using authentic seed catalog:', err);
+      }
+    };
+
+    fetchLiveCatalog();
   }, []);
 
   // Autonomous Hourly Auto-Scraper (runs every 60 minutes)
