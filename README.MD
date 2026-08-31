@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🚀 NextLane AI
+#  NextLane AI
 ### **Autonomous Opportunity Discovery, Matching & Action Agent**
 
 [![Hackathon](https://img.shields.io/badge/All%20Things%20Agentic-Hackathon%20Submission-FF7043?style=for-the-badge&logo=google&logoColor=white)](https://aistudio.google.com)
@@ -36,7 +36,7 @@ Existing solutions are either **static job boards** (requiring endless manual se
 
 **NextLane AI** is a **goal-driven, self-governing opportunity agent**. It does not wait for user commands. Once initialized with a user profile or strategic career goal, the agent operates autonomously in continuous background cycles:
 
-$$\mathbf{Goal} \longrightarrow \mathbf{Plan} \longrightarrow \mathbf{Execute\ Tools} \longrightarrow \mathbf{Decide\ \&\ Prioritize} \longrightarrow \mathbf{Act}$$
+Goal → Plan → Execute Tools → Decide & Prioritize → Act
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────────────┐
@@ -58,7 +58,7 @@ $$\mathbf{Goal} \longrightarrow \mathbf{Plan} \longrightarrow \mathbf{Execute\ T
 
 ---
 
-## 🎯 Key Features
+## Key Features
 
 ### 1. 🌐 Autonomous Web Discovery
 - Concurrently queries and ingests data from **8+ live opportunity platforms** (Devpost, Unstop, MLH, RemoteOK, Remotive, Arbeitnow, Jobicy, LinkedIn, Scholarships360, Opportunities Corner).
@@ -427,7 +427,7 @@ NextLane AI is architected for zero-cost, enterprise-grade deployment on **Googl
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 🚀 Deploying Backend to Google Cloud Run
+### Deploying Backend to Google Cloud Run
 
 ```bash
 # 1. Authenticate with GCP and set project
